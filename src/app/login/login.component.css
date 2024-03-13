@@ -1,12 +1,25 @@
-.btn.btn-primary {
+.btn.btn-primary.btn-login {
     
-    margin-top: 50px;
-    margin-left: 10px;
+    margin: 15px 0px;
     padding: 10px 20px;
     text-align: center;
     display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    font-size: 16px; 
     cursor: pointer;
 }
+
+.btn.btn-primary.btn-register {
+    
+    margin: 15px 10px;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px; 
+    cursor: pointer;
+}
+
+label {
+    margin: 10px 0px 10px 0px;
+}
+
 
