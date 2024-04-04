@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { authService } from '../auth.service';
 
 @Component({
   selector: 'app-header',
@@ -6,5 +7,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
+
+  private searchVisible = false;
+  
+  constructor(private _authService : authService) { }
+
+  isLogged() {
+    return this._authService.isLogged();
+  }
+
+  toggleSearch() {
+    this.searchVisible = !this.searchVisible;
+  }
+
+  isSearchVisible() {
+    return this.searchVisible;
+  }
 
 }

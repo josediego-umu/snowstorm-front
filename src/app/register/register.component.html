@@ -1,0 +1,40 @@
+
+<app-header></app-header>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Registro</h3>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="this.register()" #registerForm="ngForm">
+                        
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" [(ngModel)]="this.user.username" required>
+                        
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" [(ngModel)]="this.user.name" required>
+
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" [(ngModel)]="this.user.email" required>
+
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" [(ngModel)]="this.user.password" required>
+
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                placeholder="Confirm your password" [(ngModel)]="this.confirmPassword" required>
+
+                            <label for="birthday">Birthday</label>
+                            <input type="date" class="form-control" id="birthday" name="birthday" [(ngModel)]="this.user.dateOfBirth" required>                     
+                        <button type="submit" class="btn btn-primary btn-register">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>

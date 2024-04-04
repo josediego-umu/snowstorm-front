@@ -1,0 +1,47 @@
+<div class="main-container">
+    <app-header></app-header>
+    <div class="content">
+        <div class="container d-flex justify-content-center align-items-center">
+            <div class="card mt-4">
+                <div class="card-header">
+                    Perfil
+                </div>
+                <form (ngSubmit)="saveUser()" class="justify-content-between">
+                    <div class="form-group">
+                        <label for="name">Nombre:</label>
+                        <input type="text" class="form-control" id="name" [(ngModel)]="this.user.name" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Nombre de usuario:</label>
+                        <input type="text" class="form-control" id="username" [(ngModel)]="this.user.username"
+                            name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" class="form-control" id="password" [(ngModel)]="this.user.password"
+                            name="password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar contraseña:</label>
+                        <input type="password" class="form-control" id="confirmPassword"
+                            [(ngModel)]="this.confirmPassword" name="confirmPassword">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" [(ngModel)]="this.user.email" name="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="birthday">Fecha de nacimiento:</label>
+                        <input type="date" class="form-control" id="birthday" [(ngModel)]="this.user.dateOfBirth"
+                            name="birthday">
+                    </div>
+                        <button type="submit" class="btn btn-primary mt-2 mb-2">Guardar cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>

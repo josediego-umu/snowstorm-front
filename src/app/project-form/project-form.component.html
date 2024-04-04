@@ -1,0 +1,47 @@
+<app-header> </app-header>
+
+<body>
+    <form (ngSubmit)="onSubmit()" #projectForm="ngForm">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Crear proyecto</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="file">Seleccione un archivo CSV/JSON</label>
+                                <div class="file-input-wrapper">
+                                    <input type="file" class="form-control-file" name="file"
+                                        placeholder="Enter username" (change)="handleFileInput($event)" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="projectName">Project name</label>
+                                <input type="text" class="form-control" name="projectName" placeholder="Enter username"
+                                    [(ngModel)]="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input type="textarea" class="form-control" name="description" placeholder="description"
+                                    [(ngModel)]="description">
+                            </div>
+                            <div class="form-group selectInput">
+                                <label for="visibilidad">Visibilidad:</label>
+                                <select name="visibilidad" [(ngModel)]="visibility">
+                                    <option value="public">Público</option>
+                                    <option value="private">Privado</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-login"
+                                [disabled]="projectForm.invalid">Crear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+
+<app-footer> </app-footer>

@@ -1,0 +1,32 @@
+label {
+    margin: 10px 0px 10px 0px;
+}
+
+.btn {
+ 
+    background-color: #3e9cb9;
+    border: none;
+}
+
+.btn:hover {
+    background-color: #2e7e9b;
+}
+
+.btn:active {
+
+    background-color: #26667e;
+}
+
+.btn.btn-primary.btn-register {
+      
+    margin: 15px 10px;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px; 
+    cursor: pointer;
+}
+
+.container {
+    margin-top: 5vh;
+}

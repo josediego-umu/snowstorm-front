@@ -1,11 +1,49 @@
-.btn-primary {
-    margin-right: 10px;
+nav {   
+    padding-bottom: 2vh;
+}
+
+.btn-primary {   
+    position: absolute;
+    right: 2vw;
+    top: 0.3vh;
+    background-color: #3e9cb9;
+    border: none;
+}
+
+.bi.bi-person-circle {   
+    position: absolute;
+    right: 2vw;
+    bottom: 0.1vh;
+    font-size: 6vh;
+    background-color: white;
+    color: #26667e;
+}
+
+.btn-primary:hover {   
+    background-color: #2e7e9b;
 }
 
 .logo-st-md {
     margin-left: 20px;
 }
 
-.form-control .me-2 {
-    width: 400px;
+.form-control.me-2 {
+    width: 15vw;
+    height: 4vh;
+    margin-left: 1vw;
+}
+
+.btn.btn-outline-success {   
+    width: 5vw;
+    height: 4vh;
+}
+
+.glass {
+    margin-left: 20px;
+    margin-top: 0.5vh;
+}
+
+.bi.bi-search{
+    
+    cursor: pointer;
 }

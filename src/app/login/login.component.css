@@ -1,25 +1,42 @@
+
+.btn {
+  background-color: #3e9cb9;
+  border: none;
+}
+
+.btn:active {
+  background-color: #26667e;
+}
+
+.btn:hover {
+  background-color: #2e7e9b;
+}
+
+  
 .btn.btn-primary.btn-login {
-    
-    margin: 15px 0px;
-    padding: 10px 20px;
-    text-align: center;
-    display: inline-block;
-    font-size: 16px; 
-    cursor: pointer;
+  margin: 15px 0px;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .btn.btn-primary.btn-register {
-    
-    margin: 15px 10px;
-    padding: 10px 20px;
-    text-align: center;
-    display: inline-block;
-    font-size: 16px; 
-    cursor: pointer;
+  margin: 15px 10px;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 label {
-    margin: 10px 0px 10px 0px;
+  margin: 10px 0px 10px 0px;
 }
 
+.container {
 
+  margin-top: 10vh;
+
+}

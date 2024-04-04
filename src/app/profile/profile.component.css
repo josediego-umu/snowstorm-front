@@ -1,0 +1,39 @@
+.card {
+    margin-top: 10vh;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    width: 50vw;
+}
+
+label {
+    margin-top: 1vh;
+    margin-left: 5vw;
+}
+
+input {
+    margin-top: 1vh;
+    margin-left: 5vw;
+    width: 40vw;
+    
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Para ocupar al menos todo el alto de la pantalla */
+    
+}
+
+.content {
+    flex: 1; /* Esto hará que este div ocupe todo el espacio disponible */
+    overflow-y: auto; /* Agrega una barra de desplazamiento vertical si el contenido es demasiado largo */
+}
+
+.btn.btn-primary {
+    margin-top: 2vh;
+    margin-left: 19vw;
+}
+
+app-footer {
+    margin-top: 5vh;
+}
