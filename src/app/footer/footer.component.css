@@ -1,21 +1,10 @@
 .footer {
-    background-color: #f8f9fa; /* Cambia esto al color deseado */
+  
+    background-color: #f8f9fa; 
     left: 0;
     bottom: 0;
-    width: 100%;
+    width: 100vw;
     padding: 20px;
-    position: fixed;
+    position: relative;
     
   }
-  /*
-  .footer .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-  }
-  
-
-  .footer .container .row {
-    margin-top: auto;
-  } */

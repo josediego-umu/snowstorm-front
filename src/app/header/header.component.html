@@ -1,4 +1,4 @@
-
+<header>
   <nav class="d-md-none navbar navbar-expand-lg navbar-light bg-light">
     <div class="container flex-items-center">
       <i class="bi bi-search" (click)="toggleSearch()"></i>
@@ -6,10 +6,10 @@
       <img src="https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png" width="30"
         height="24" alt="Logo" class="logo">
     </a>-->
-      <button *ngIf="!isLogged()" type="button" routerLink="/login" class="btn btn-primary" >Login</button>
-      <a *ngIf="isLogged()" routerLink="/profile" class="nav-link"> 
+      <button *ngIf="!isLogged()" type="button" routerLink="/login" class="btn btn-primary">Login</button>
+      <a *ngIf="isLogged()" routerLink="/profile" class="nav-link">
         <i class="bi bi-person-circle"></i>
-      </a> 
+      </a>
     </div>
   </nav>
 
@@ -34,10 +34,10 @@
           <button type="button" routerLink="/login" class="btn btn-primary">Login</button>
         </li>
         <li class="nav-item" *ngIf="isLogged()">
-          <a routerLink="/profile" class="nav-link"> 
+          <a routerLink="/profile" class="nav-link">
             <i class="bi bi-person-circle"></i>
-          </a>          
+          </a>
       </ul>
     </div>
   </nav>
-
+</header>

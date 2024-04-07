@@ -8,6 +8,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ProjectFormComponent } from './project-form/project-form.component';
 import { DataStructComponent } from './data-struct/data-struct.component';
 
+
 const routes: Routes = [
   { path: '', component : HomeComponent },
   { path: 'register', component : RegisterComponent },

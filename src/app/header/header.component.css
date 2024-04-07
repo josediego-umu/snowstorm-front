@@ -1,9 +1,17 @@
+.header {
+    width: 100%;
+    position: fixed;
+    
+}
+
 nav {   
     padding-bottom: 2vh;
+    width: 100%;
+    position: fixed;
 }
 
 .btn-primary {   
-    position: absolute;
+    position: fixed;
     right: 2vw;
     top: 0.3vh;
     background-color: #3e9cb9;
@@ -11,11 +19,11 @@ nav {
 }
 
 .bi.bi-person-circle {   
-    position: absolute;
+    position: fixed;
     right: 2vw;
-    bottom: 0.1vh;
-    font-size: 6vh;
-    background-color: white;
+    top: -1vh;
+    font-size: 5vh;
+    background-color: transparent;
     color: #26667e;
 }
 

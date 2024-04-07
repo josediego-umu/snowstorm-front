@@ -6,4 +6,6 @@ export class Row {
         this.valuesRow = valuesRow;
         this.labeledRow = labeledRow;
     }
+    
+  
 }
