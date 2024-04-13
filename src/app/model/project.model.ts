@@ -1,4 +1,4 @@
-import { StructuredData } from './structuredData.model';
+import { StructuredData } from './structured-Data.model';
 
 export class Project {
   id: string;

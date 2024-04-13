@@ -1,0 +1,64 @@
+<body>
+    <app-header></app-header>
+
+    <form>
+        <div *ngIf="this.dataReceived">
+
+            <button type="button" (click)="this.analyze()" class="btn btn-primary btn-analyzer">Analyze</button>
+            <button type="button" (click)="this.exportToCsvLocal()" class="btn btn-primary btn-export">Export</button>
+            <button type="button" (click)="this.saveProject()" class="btn btn-primary btn-save">Save</button>
+
+            <table class="table table-striped">
+                <caption>{{ this.project.structuredData.name }}</caption>
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Index</th>
+                        <th scope="col" *ngFor="let header of this.project.structuredData.rows[0].valuesRow">{{ header
+                            }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of this.project.structuredData.rows.slice(1); let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td [matMenuTriggerFor]="menu" #menuTrigger data-toggle="modal" data-target="#modalSearch"
+                            data-whatever="@getbootstrap" (click)="this.SelectCell(i+1, j)"
+                            *ngFor="let value of row.valuesRow ; let j = index ">
+                            {{row.valuesRow[j]}} {{row?.labeledRow? row?.labeledRow[j]? ' | ' + row?.labeledRow[j] : ''
+                            : ''}} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    <!-- <div *ngIf="this.value">
+        <form>
+            <ul class="list-group list-group-horizontal">
+                <li *ngFor="let option of this.labels" (click)="selectOption(option)">{{ option }}
+                </li>
+            </ul>
+        </form>
+    </div>
+    -->
+    <mat-menu style="width: 800px;" class="menu-content" #menu="matMenu">
+
+        <input class="search-input" type="text" matInput placeholder="Search..." [(ngModel)]="this.value" (click)="$event.stopPropagation()"
+            (keyup.enter)="this.searchLabels()" (ngModelChange)="this.resetLabel()">
+        <mat-dialog-content>
+            <ul class="menu-list-content" *ngFor="let label of this.labels">
+                <li class="option" (click)="this.selectOption(label)"> {{label}}</li>
+            </ul>
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button mat-menu-item (click)="$event.stopPropagation(); this.previousLabel()">Previous</button>
+            <button mat-menu-item (click)="$event.stopPropagation(); this.nextLabel()">Next</button>
+        </mat-dialog-actions>
+    </mat-menu>
+
+    <div class="spinner-border text-info loadScreen" role="status" *ngIf="!dataReceived">
+    </div>
+
+    <app-footer *ngIf="dataReceived"></app-footer>
+
+</body>

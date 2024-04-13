@@ -4,20 +4,32 @@ import { DatePipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { JwtInterceptor } from './interceptor/jwt-interceptor';
+import { JwtInterceptor } from './handler/interceptor/jwt-interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { HomeComponent } from './home/home.component';
-import { MessageComponent } from './message/message.component';
-import { HandlerMessageComponent } from './handler-message/handler-message.component';
-import { ProfileComponent } from './profile/profile.component';
-import { ProjectFormComponent } from './project-form/project-form.component';
-import { DataStructComponent } from './data-struct/data-struct.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { HomeComponent } from './components/home/home.component';
+import { MessageComponent } from './components/message/message.component';
+import { HandlerMessageComponent } from './handler/handler-message/handler-message.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { ProjectFormComponent } from './components/project-form/project-form.component';
+import { DataStructComponent } from './components/data-struct/data-struct.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule} from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { ModalComponent } from './components/modal/modal.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DialogCustomComponent } from './components/dialog-custom/dialog-custom.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DialogWithTemplateComponent } from './components/dialog-with-template/dialog-with-template.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconButton } from '@angular/material/button';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -31,14 +43,29 @@ import { DataStructComponent } from './data-struct/data-struct.component';
     HandlerMessageComponent,
     ProfileComponent,
     ProjectFormComponent,
-    DataStructComponent
+    DataStructComponent,
+    ModalComponent,
+    DialogCustomComponent,
+    DialogWithTemplateComponent,
+    
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    MatDialogModule,
+    MatMenuModule,
+    MatButtonModule,
+    NgbModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    
 
   ],
   providers: [DatePipe, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],

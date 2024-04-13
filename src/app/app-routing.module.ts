@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
-import { HandlerMessageComponent } from './handler-message/handler-message.component';
-import { ProfileComponent } from './profile/profile.component';
-import { ProjectFormComponent } from './project-form/project-form.component';
-import { DataStructComponent } from './data-struct/data-struct.component';
+import { HomeComponent } from './components/home/home.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
+import { HandlerMessageComponent } from './handler/handler-message/handler-message.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { ProjectFormComponent } from './components/project-form/project-form.component';
+import { DataStructComponent } from './components/data-struct/data-struct.component';
+import { MatDialogActions } from '@angular/material/dialog';
+import { ModalComponent } from './components/modal/modal.component';
 
 
 const routes: Routes = [
@@ -17,6 +19,7 @@ const routes: Routes = [
   { path: 'profile', component : ProfileComponent },
   { path: 'project/new', component : ProjectFormComponent },
   { path: 'project/:id', component : DataStructComponent },
+  { path: 'modal', component : ModalComponent },
   //{ path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 

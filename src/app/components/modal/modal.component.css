@@ -1,0 +1,13 @@
+.close {
+    position: relative;
+    left: 300px;
+}
+
+.modal-snownote:focus{
+    outline: none;
+}
+
+.btn:focus,
+.modal-snownote:focus {
+  outline: none;
+}
