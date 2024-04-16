@@ -14,6 +14,7 @@ export class ProjectService {
   URLCreateProject: string = 'http://localhost:8085/project/';
   URLExport: string = 'http://localhost:8085/project/csv/';
   URLLabel : string = 'http://localhost:8085/analyzer/labels';
+  URLSearch : string = 'http://localhost:8085/project/filter';
 
   ProjectSelect: Project | null = null;
 

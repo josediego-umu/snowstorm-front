@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogCustomComponent } from '../components/dialog-custom/dialog-custom.component';
 import { DialogCustomData } from '../model/dialog-custom-data.model';
-import { DialogWithTemplateData } from '../model/dialog-with-template-data';
+import { DialogWithTemplateData } from '../model/dialog-with-template-data.model';
 import { DialogWithTemplateComponent } from '../components/dialog-with-template/dialog-with-template.component';
 
 @Injectable({

@@ -1,6 +1,6 @@
 import { Component, Inject, inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogWithTemplateData } from 'src/app/model/dialog-with-template-data';
+import { DialogWithTemplateData } from 'src/app/model/dialog-with-template-data.model';
 
 @Component({
   selector: 'app-dialog-with-template',

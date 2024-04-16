@@ -30,6 +30,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconButton } from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { SearchComponent } from './components/search/search.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     ModalComponent,
     DialogCustomComponent,
     DialogWithTemplateComponent,
+    SearchComponent,
     
     
   ],
@@ -65,7 +68,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     MatInputModule,
     MatSelectModule,
     MatFormFieldModule,
-    
+    MatPaginatorModule,
 
   ],
   providers: [DatePipe, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],

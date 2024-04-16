@@ -9,6 +9,7 @@ import { ProjectFormComponent } from './components/project-form/project-form.com
 import { DataStructComponent } from './components/data-struct/data-struct.component';
 import { MatDialogActions } from '@angular/material/dialog';
 import { ModalComponent } from './components/modal/modal.component';
+import { SearchComponent } from './components/search/search.component';
 
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'project/new', component : ProjectFormComponent },
   { path: 'project/:id', component : DataStructComponent },
   { path: 'modal', component : ModalComponent },
+  { path: 'search', component : SearchComponent },
   //{ path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 
