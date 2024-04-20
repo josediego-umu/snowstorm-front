@@ -32,6 +32,9 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { SearchComponent } from './components/search/search.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
+import {MatCardModule} from '@angular/material/card';
+import {MatRadioModule} from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -69,6 +72,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatSelectModule,
     MatFormFieldModule,
     MatPaginatorModule,
+    MatSortModule,
+    MatCardModule,
+    MatRadioModule
 
   ],
   providers: [DatePipe, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],

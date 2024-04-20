@@ -69,6 +69,10 @@ export class ProjectService {
     return this.http.get<Project>(this.URLCreateProject + id);
   }
 
+  getFilteredProjects(httpParams : HttpParams): Observable<any> {
+    return this.http.get<Project[]>(this.URLSearch, {params : httpParams} );
+  }
+
   analyze(project: Project): Observable<any> {
     console.log('Analyze Project:', project);
     return this.http.post(this.URLAnalysis, project.structuredData);
