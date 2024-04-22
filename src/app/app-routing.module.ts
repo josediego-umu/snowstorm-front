@@ -10,23 +10,25 @@ import { DataStructComponent } from './components/data-struct/data-struct.compon
 import { MatDialogActions } from '@angular/material/dialog';
 import { ModalComponent } from './components/modal/modal.component';
 import { SearchComponent } from './components/search/search.component';
-
+import { ConfigComponent } from './components/config/config.component';
 
 const routes: Routes = [
-  { path: '', component : HomeComponent },
-  { path: 'register', component : RegisterComponent },
-  { path:'login', component: LoginComponent},
-  { path: 'message', component : HandlerMessageComponent },
-  { path: 'profile', component : ProfileComponent },
-  { path: 'project/new', component : ProjectFormComponent },
-  { path: 'project/:id', component : DataStructComponent },
-  { path: 'modal', component : ModalComponent },
-  { path: 'search', component : SearchComponent },
+  { path: '', component: HomeComponent },
+  { path: 'home', redirectTo: '' },
+  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'message', component: HandlerMessageComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'project/new', component: ProjectFormComponent },
+  { path: 'modal', component: ModalComponent },
+  { path: 'search', component: SearchComponent },
+  { path: 'project/:id/config', component: ConfigComponent },
+  { path: 'project/:id', component: DataStructComponent },
   //{ path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

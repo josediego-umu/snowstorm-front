@@ -27,6 +27,14 @@ input {
 .content {
     flex: 1; /* Esto hará que este div ocupe todo el espacio disponible */
     overflow-y: auto; /* Agrega una barra de desplazamiento vertical si el contenido es demasiado largo */
+    width: 100vw;
+    position: relative;
+}
+
+.card-content{
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+
 }
 
 .btn.btn-primary {
@@ -34,6 +42,11 @@ input {
     margin-left: 19vw;
 }
 
+app-header {
+    position: relative;
+    z-index: 100;
+}
+
 app-footer {
-    margin-top: 5vh;
+    position: relative;
 }

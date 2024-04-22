@@ -15,7 +15,7 @@ export class DataStructComponent implements OnInit {
 [x: string]: any;
 
   id: string | null = '';
-  project: any | null = null;
+  project: any = null;
   dataReceived: boolean = false;
   row: number = 0;
   cell: number = 0;
@@ -111,6 +111,11 @@ export class DataStructComponent implements OnInit {
     console.log('Row:', this.row);
     console.log('Cell:', this.cell);
     console.log('Labels:', this.project.structuredData.rows[this.row]);
+    
+    if (!this.project.structuredData.rows[this.row].labeledRow) {
+      this.project.structuredData.rows[this.row].labeledRow = [];
+    }
+
     this.project.structuredData.rows[this.row].labeledRow[this.cell] = option;
     this.index = 0;
   }

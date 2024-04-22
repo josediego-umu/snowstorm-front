@@ -17,7 +17,7 @@ label {
     background-color: #26667e;
 }
 
-.btn.btn-primary.btn-register {
+.btn .btn-primary.btn-register {
       
     margin: 15px 10px;
     padding: 10px 20px;
@@ -28,5 +28,18 @@ label {
 }
 
 .container {
-    margin-top: 5vh;
+    display: relative;
+    min-height: 90vh;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.main {
+    
+    justify-content: center;
+    align-items: center;
+    margin-top: 10%;
+    margin-bottom: 10%;
+
 }

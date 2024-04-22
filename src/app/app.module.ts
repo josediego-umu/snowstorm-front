@@ -19,7 +19,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ProjectFormComponent } from './components/project-form/project-form.component';
 import { DataStructComponent } from './components/data-struct/data-struct.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { ModalComponent } from './components/modal/modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,13 +28,17 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DialogWithTemplateComponent } from './components/dialog-with-template/dialog-with-template.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconButton } from '@angular/material/button';
-import {MatSelectModule} from '@angular/material/select';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { SearchComponent } from './components/search/search.component';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatSortModule} from '@angular/material/sort';
-import {MatCardModule} from '@angular/material/card';
-import {MatRadioModule} from '@angular/material/radio';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list'; 
+import { MatIconModule } from '@angular/material/icon';
+import { ConfigComponent } from './components/config/config.component';
 
 @NgModule({
   declarations: [
@@ -53,8 +57,7 @@ import {MatRadioModule} from '@angular/material/radio';
     DialogCustomComponent,
     DialogWithTemplateComponent,
     SearchComponent,
-    
-    
+    ConfigComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,10 +77,15 @@ import {MatRadioModule} from '@angular/material/radio';
     MatPaginatorModule,
     MatSortModule,
     MatCardModule,
-    MatRadioModule
-
+    MatRadioModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule
   ],
-  providers: [DatePipe, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
-  bootstrap: [AppComponent]
+  providers: [
+    DatePipe,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { authService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -9,8 +10,11 @@ import { Component } from '@angular/core';
 export class HomeComponent {
 
 
-  constructor() { }
+  constructor(private _authService: authService) { }
 
+  isLogged() {
+    return this._authService.isLogged();
+  }
 
 
 }

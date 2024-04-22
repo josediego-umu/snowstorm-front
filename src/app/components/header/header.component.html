@@ -1,28 +1,39 @@
 <header>
   <div>
-    <nav class="d-md-none navbar navbar-expand-lg navbar-light bg-light">
+    <!-- <nav class="d-md-none navbar navbar-expand-lg navbar-light bg-light">
       <div class="container flex-items-center">
-
-        <!-- <a class="navbar-brand" href="#">
-      <img src="https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png" width="30"
-        height="24" alt="Logo" class="logo">
-    </a>-->
         <button *ngIf="!isLogged()" type="button" routerLink="/login" class="btn btn-primary">Login</button>
         <a *ngIf="isLogged()" routerLink="/profile" class="nav-link">
           <i class="bi bi-person-circle"></i>
         </a>
       </div>
-    </nav>
+    </nav> -->
 
 
     <nav class="d-none d-md-block navbar navbar-expand-lg navbar-light bg-light">
       <div class="d-flex flex-justify-between flex-items-center width-full width-lg-auto">
-        <!--<a class="navbar-brand ms-0 " routerLink="">
-      <img class="logo-st-md" src="https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png" width="30"
-        height="24" alt="Logo">
-    </a> -->
-        <!---->
         <ul class="navbar-nav">
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item routerLink="/home">
+              <mat-icon>home</mat-icon>
+              <span>Home</span>
+            </button>
+            <button mat-menu-item routerLink="/project/new" *ngIf="isLogged()">
+              <mat-icon>source</mat-icon>
+              <span>Create Project</span>
+            </button>
+            <button mat-menu-item routerLink="/search">
+              <mat-icon>search</mat-icon>
+              <span>Search</span>
+            </button>
+            <button mat-menu-item *ngIf="isLogged()" (click)="this.logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+          </mat-menu>
           <li class="nav-item" *ngIf="!isLogged()">
             <button type="button" routerLink="/login" class="btn btn-primary">Login</button>
           </li>
