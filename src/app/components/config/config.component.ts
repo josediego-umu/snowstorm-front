@@ -40,7 +40,7 @@ export class ConfigComponent implements OnInit {
     await this.loadProject();
 
     if (this.project != null) {
-      this.dataSourceMain = new MatTableDataSource<User>(this.project.readers);
+      this.dataSourceMain = new MatTableDataSource<User>(this.project?.readers);
     }
   }
 
@@ -66,26 +66,26 @@ export class ConfigComponent implements OnInit {
       this.dataSourceMain.filter = filterValue.trim().toLowerCase();
     }
 
-    if (this.dataSourceMain.paginator) {
-      this.dataSourceMain.paginator.firstPage();
+    if (this.dataSourceMain?.paginator) {
+      this.dataSourceMain?.paginator.firstPage();
     }
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    if (this.dataSourceMain.data.length === 0) {
+    if (this.dataSourceMain?.data?.length === 0) {
       return false;
     }
 
     let numRows = 0;
 
     if (this.optionTable === 'Dialog') {
-      numRows = this.dataSourceDialog.data.length;
+      numRows = this.dataSourceDialog?.data?.length;
     } else {
-      numRows = this.dataSourceMain.data.length;
+      numRows = this.dataSourceMain?.data?.length;
     }
 
-    const numSelected = this.selection.selected.length;
+    const numSelected = this.selection?.selected?.length;
 
     return numSelected === numRows;
   }
@@ -98,9 +98,9 @@ export class ConfigComponent implements OnInit {
     }
 
     if (this.optionTable === 'Dialog') {
-      this.selection.select(...this.dataSourceDialog.data);
+      this.selection.select(...this.dataSourceDialog?.data);
     } else {
-      this.selection.select(...this.dataSourceMain.data);
+      this.selection.select(...this.dataSourceMain?.data);
     }
   }
 
@@ -115,15 +115,15 @@ export class ConfigComponent implements OnInit {
   removeSelectedRows() {
     this.selection.selected.forEach((item) => {
       let index: number = this.dataSourceMain.data.findIndex((d) => d === item);
-      this.dataSourceMain.data.splice(index, 1);
+      this.dataSourceMain?.data.splice(index, 1);
       this.dataSourceMain = new MatTableDataSource<User>(
-        this.dataSourceMain.data
+        this.dataSourceMain?.data
       );
 
       if (this.optionTable === 'Readers' && this.project != null) {
-        this.project.readers = this.dataSourceMain.data;
+        this.project.readers = this.dataSourceMain?.data;
       } else if (this.optionTable === 'Writers' && this.project != null) {
-        this.project.writers = this.dataSourceMain.data;
+        this.project.writers = this.dataSourceMain?.data;
       }
     });
   }
