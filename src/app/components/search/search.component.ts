@@ -17,6 +17,7 @@ import { MatRadioGroup } from '@angular/material/radio';
   styleUrls: ['./search.component.css'],
 })
 export class SearchComponent {
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatRadioGroup) radioGroup!: MatRadioGroup;
@@ -101,6 +102,10 @@ export class SearchComponent {
   redirectoToProject(id: String) {
     this._router.navigate(['/project/' + id]);
   }
+
+  redirectToConfig(id: String) {
+    this._router.navigate(['/project/' + id + '/config/']);
+    }
 
   checPermission(projectDTO: ProjectDTO) {
     if (this.user == null) {

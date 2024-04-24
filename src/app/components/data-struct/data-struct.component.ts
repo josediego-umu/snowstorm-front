@@ -5,14 +5,13 @@ import { DialogServiceService } from 'src/app/services/dialog-service.service';
 import { DialogWithTemplateComponent } from '../dialog-with-template/dialog-with-template.component';
 import { MatDialogRef } from '@angular/material/dialog';
 
-
 @Component({
   selector: 'app-data-struct',
   templateUrl: './data-struct.component.html',
   styleUrls: ['./data-struct.component.css'],
 })
 export class DataStructComponent implements OnInit {
-[x: string]: any;
+  [x: string]: any;
 
   id: string | null = '';
   project: any = null;
@@ -24,7 +23,7 @@ export class DataStructComponent implements OnInit {
   limit: number = 10;
   labels: string[] = [];
 
-  private matDialogRef! : MatDialogRef<DialogWithTemplateComponent>;
+  private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
 
   constructor(
     private _route: ActivatedRoute,
@@ -92,14 +91,13 @@ export class DataStructComponent implements OnInit {
 
     this.labels = res as string[];
     console.log('Labels:', res);
-   
   }
 
   searchLabels() {
     console.log('Searching Labels');
     console.log('Value:', this.value, 'Index:', this.index);
     this._projectService
-      .searchLabels(this.value, this.index*10, this.limit)
+      .searchLabels(this.value, this.index * 10, this.limit)
       .then((res) => {
         console.log('Labels:', res);
         this.labels = res as string[];
@@ -111,7 +109,7 @@ export class DataStructComponent implements OnInit {
     console.log('Row:', this.row);
     console.log('Cell:', this.cell);
     console.log('Labels:', this.project.structuredData.rows[this.row]);
-    
+
     if (!this.project.structuredData.rows[this.row].labeledRow) {
       this.project.structuredData.rows[this.row].labeledRow = [];
     }
@@ -133,21 +131,25 @@ export class DataStructComponent implements OnInit {
     if (this.index > 0) {
       this.index--;
     }
-    
+
     this.searchLabels();
   }
 
-  openDialogCustom(){
+  openDialogCustom() {
     this._dialogService.openDialogCustom({
-      title: 'Custom Dialog', 
-      content: 'This is a custom dialog'
+      title: 'Custom Dialog',
+      content: 'This is a custom dialog',
     });
   }
 
-  openDialogWithTemplate(template: TemplateRef<any>){
+  openDialogWithTemplate(template: TemplateRef<any>) {
     this.matDialogRef = this._dialogService.openDialogWithTemplate({
-      template
+      template,
     });
   }
 
+  havePermission() : boolean {
+    return this._projectService.checPermission(this.project);
+  }
+  
 }

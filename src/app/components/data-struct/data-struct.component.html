@@ -4,9 +4,11 @@
     <form>
         <div *ngIf="this.dataReceived">
 
-            <button type="button" (click)="this.analyze()" class="btn btn-primary btn-analyzer">Analyze</button>
+            <button *ngIf="this.havePermission()" type="button" (click)="this.analyze()"
+                class="btn btn-primary btn-analyzer">Analyze</button>
             <button type="button" (click)="this.exportToCsvLocal()" class="btn btn-primary btn-export">Export</button>
-            <button type="button" (click)="this.saveProject()" class="btn btn-primary btn-save">Save</button>
+            <button *ngIf="this.havePermission()" type="button" (click)="this.saveProject()"
+                class="btn btn-primary btn-save">Save</button>
 
             <table class="table table-striped">
                 <caption>{{ this.project.structuredData.name }}</caption>
@@ -32,20 +34,11 @@
         </div>
     </form>
 
-    <!-- <div *ngIf="this.value">
-        <form>
-            <ul class="list-group list-group-horizontal">
-                <li *ngFor="let option of this.labels" (click)="selectOption(option)">{{ option }}
-                </li>
-            </ul>
-        </form>
-    </div>
-    -->
-    <mat-menu style="width: 800px;" class="menu-content" #menu="matMenu">
+    <mat-menu class="menu-content" #menu="matMenu">
 
-        <input class="search-input" type="text" matInput placeholder="Search..." [(ngModel)]="this.value" (click)="$event.stopPropagation()"
-            (keyup.enter)="this.searchLabels()" (ngModelChange)="this.resetLabel()">
-        <mat-dialog-content>
+        <input class="search-input" type="text" matInput placeholder="Search..." [(ngModel)]="this.value"
+            (click)="$event.stopPropagation()" (keyup.enter)="this.searchLabels()" (ngModelChange)="this.resetLabel()">
+        <mat-dialog-content style="min-width: 20vw">
             <ul class="menu-list-content" *ngFor="let label of this.labels">
                 <li class="option" (click)="this.selectOption(label)"> {{label}}</li>
             </ul>

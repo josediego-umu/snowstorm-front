@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Project } from '../model/project.model';
 import * as Papa from 'papaparse';
 import { StructuredData } from '../model/structured-Data.model';
+import { ProjectDTO } from '../model/projectDTO.model';
+import { authService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +20,7 @@ export class ProjectService {
 
   ProjectSelect: Project | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private _authService: authService) {}
 
   createProject(
     name: string,
@@ -148,6 +150,28 @@ export class ProjectService {
     return this.http.get(this.URLLabel, { params }).toPromise() as Promise<String[]>;
   }
 
+
+  checPermission(project: ProjectDTO | Project) {
+    
+    const user = this._authService.getUserFromToken();
+    
+    if (user == null) {
+      return false;
+    }
+
+    if (project.owner != null && project.owner.id == user.id) {
+      return true;
+    }
+
+    if (
+      project.writers != null &&
+      project.writers.some((writer) => writer.id == user?.id)
+    ) {
+      return true;
+    }
+
+    return false;
+  }
 
 
 }

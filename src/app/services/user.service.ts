@@ -45,4 +45,8 @@ export class UserService {
     
   }
 
+  getUsers() : Observable<User[]> {
+    return this._http.get<User[]>("http://localhost:8085/user");
+  }
+
 }

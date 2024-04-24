@@ -36,9 +36,13 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import {MatTableModule} from '@angular/material/table';
 import { MatListModule } from '@angular/material/list'; 
 import { MatIconModule } from '@angular/material/icon';
+import { MatTableDataSource } from '@angular/material/table';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import { ConfigComponent } from './components/config/config.component';
+
 
 @NgModule({
   declarations: [
@@ -58,6 +62,7 @@ import { ConfigComponent } from './components/config/config.component';
     DialogWithTemplateComponent,
     SearchComponent,
     ConfigComponent,
+  
   ],
   imports: [
     BrowserModule,
@@ -80,7 +85,10 @@ import { ConfigComponent } from './components/config/config.component';
     MatRadioModule,
     MatSidenavModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    MatTableModule,
+    MatCheckboxModule,
+    
   ],
   providers: [
     DatePipe,
