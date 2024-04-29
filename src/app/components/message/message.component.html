@@ -1,3 +1,20 @@
-<div [ngClass]="{'success': type === 'success', 'error': type === 'error', 'warning': type === 'warning', 'info': type === 'info'}">
-    {{ message }}
+<div
+    [ngClass]="{'success': type === 'success', 'error': type === 'error', 'warning': type === 'warning', 'info': type === 'info'}">
+    <div>
+        <div class="code" *ngIf="code && code !== ''">
+            {{code}}
+        </div>
+
+        <div class="message">
+            {{ message }}
+
+            <i *ngIf="type === 'success' " class="material-icons">check_circle_outline</i>
+            <i *ngIf="type === 'warning' " class="material-icons">warning</i>
+            <i *ngIf="type === 'info' " class="material-icons">info_outline</i>
+            <i *ngIf="type === 'error' " class="material-icons">error_outline</i>
+
+            <p *ngIf="redirectUrl && redirectUrl !== ''">
+                <a> You will be redirected automatically. </a>
+        </div>
+    </div>
 </div>

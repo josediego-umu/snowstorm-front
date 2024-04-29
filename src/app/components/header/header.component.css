@@ -15,7 +15,7 @@ nav {
 
 .btn-primary {   
     position: fixed;
-    margin-top: 10px;
+    top: 1%;
     right: 2vw; 
     background-color: #3e9cb9;
     border: none;

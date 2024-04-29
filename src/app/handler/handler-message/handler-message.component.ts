@@ -18,4 +18,12 @@ export class HandlerMessageComponent {
     return this._messageHandler.getType();
   }
 
+  getRedirectUrl() {
+    return this._messageHandler.getRedirectUrl();
+  }
+
+  getCode() {
+    return this._messageHandler.getCode();
+  }
+
 }

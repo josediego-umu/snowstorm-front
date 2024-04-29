@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../../model/user.model';
 import { authService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { MessageHandlerService } from 'src/app/services/message-handler.service';
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +15,8 @@ export class ProfileComponent {
 
   constructor(
     private _authService: authService,
-    private _userService: UserService
+    private _userService: UserService,
+    private handle: MessageHandlerService
   ) {
     this.user = new User(null, '', '', '', '', new Date());
     const userFromToken = this._authService.getUserFromToken();
@@ -55,9 +57,11 @@ export class ProfileComponent {
     this._userService.update(this.user).subscribe(
       (data) => {
         console.log(data);
+        this.handle.handlerSuccess('User updated successfully','', '/profile');
       },
       (error) => {
         console.log(error);
+        this.handle.handlerError(error.error.detail);
       }
     );
   }

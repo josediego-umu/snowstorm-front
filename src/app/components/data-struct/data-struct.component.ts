@@ -4,6 +4,7 @@ import { ProjectService } from '../../services/project.service';
 import { DialogServiceService } from 'src/app/services/dialog-service.service';
 import { DialogWithTemplateComponent } from '../dialog-with-template/dialog-with-template.component';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MessageHandlerService } from 'src/app/services/message-handler.service';
 
 @Component({
   selector: 'app-data-struct',
@@ -28,7 +29,8 @@ export class DataStructComponent implements OnInit {
   constructor(
     private _route: ActivatedRoute,
     private _projectService: ProjectService,
-    private _dialogService: DialogServiceService
+    private _dialogService: DialogServiceService,
+    private _messageHandler: MessageHandlerService
   ) {
     this._route.paramMap.subscribe((params) => {
       this.id = params.get('id');
@@ -58,7 +60,7 @@ export class DataStructComponent implements OnInit {
       },
       (error) => {
         console.log(error);
-        this.dataReceived = true;
+        this._messageHandler.handlerError(error.error.detail);
       }
     );
   }
@@ -80,6 +82,25 @@ export class DataStructComponent implements OnInit {
     console.log(projectSaved);
   }
 
+  deleteProject() {
+    console.log('Deleting Project');
+    this._projectService.deleteProject(this.project).subscribe(
+      (res) => {
+        console.log('Project Deleted');
+        console.log(res);
+        this._messageHandler.handlerSuccess(
+          'Project successfully deleted',
+          '',
+          '/search'
+        );
+      },
+      (error) => {
+        console.log(error);
+        this._messageHandler.handlerError(error.error.detail);
+      }
+    );
+  }
+
   async SelectCell(row: number, cell: number) {
     console.log('Selecting Cell:', row, cell);
     this.index = 1;
@@ -98,10 +119,16 @@ export class DataStructComponent implements OnInit {
     console.log('Value:', this.value, 'Index:', this.index);
     this._projectService
       .searchLabels(this.value, this.index * 10, this.limit)
-      .then((res) => {
-        console.log('Labels:', res);
-        this.labels = res as string[];
-      });
+      .then(
+        (res) => {
+          console.log('Labels:', res);
+          this.labels = res as string[];
+        },
+        (error) => {
+          console.log(error);
+          this._messageHandler.handlerError(error.error.detail);
+        }
+      );
   }
 
   selectOption(option: string) {
@@ -148,8 +175,15 @@ export class DataStructComponent implements OnInit {
     });
   }
 
-  havePermission() : boolean {
+  closeDialog() {
+    this._dialogService.closeDialog();
+  }
+
+  havePermission(): boolean {
     return this._projectService.checPermission(this.project);
   }
-  
+
+  ownerPermission() {
+    return this._projectService.checkOwner(this.project);
+  }
 }

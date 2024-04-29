@@ -50,3 +50,16 @@ app-header {
 app-footer {
     position: relative;
 }
+
+.btn {
+    background-color: #3e9cb9;
+    border: none;
+  }
+  
+  .btn:active {
+    background-color: #26667e;
+  }
+  
+  .btn:hover {
+    background-color: #2e7e9b;
+  }

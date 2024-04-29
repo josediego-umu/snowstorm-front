@@ -8,6 +8,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatSelectChange } from '@angular/material/select';
 import { DialogServiceService } from 'src/app/services/dialog-service.service';
 import { UserService } from 'src/app/services/user.service';
+import { MessageHandlerService } from 'src/app/services/message-handler.service';
 
 @Component({
   selector: 'app-config',
@@ -29,7 +30,8 @@ export class ConfigComponent implements OnInit {
     private _route: ActivatedRoute,
     private _projectService: ProjectService,
     private _dialogService: DialogServiceService,
-    private _userService: UserService
+    private _userService: UserService,
+    private _handleMessage: MessageHandlerService
   ) {
     this._route.paramMap.subscribe((params) => {
       this.id = params.get('id');
@@ -71,7 +73,7 @@ export class ConfigComponent implements OnInit {
     }
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
+
   isAllSelected() {
     if (this.dataSourceMain?.data?.length === 0) {
       return false;
@@ -90,7 +92,7 @@ export class ConfigComponent implements OnInit {
     return numSelected === numRows;
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
+ 
   toggleAllRows() {
     if (this.isAllSelected()) {
       this.selection.clear();
@@ -104,7 +106,7 @@ export class ConfigComponent implements OnInit {
     }
   }
 
-  /** The label for the checkbox on the passed row */
+
   checkboxLabel(row?: User): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
@@ -129,12 +131,7 @@ export class ConfigComponent implements OnInit {
   }
 
   onEnterKeydown(event: KeyboardEvent) {
-    // Evita que el formulario se envíe al pulsar "Enter"
     event.preventDefault();
-
-    // Aquí puedes acceder al valor actual del campo de entrada
-
-    // Aquí puedes ejecutar la lógica adicional que necesites
   }
 
   changeTable(option: MatSelectChange) {
@@ -177,11 +174,24 @@ export class ConfigComponent implements OnInit {
 
     this.selection.selected.forEach((item) => {
       if (this.optionTableBackup === 'Readers') {
+        if (
+          (this.project && this.project?.readers === undefined) ||
+          this.project?.readers === null
+        )
+          this.project.readers = new Array<User>();
+
         this.project?.readers.push(item);
+
         this.dataSourceMain = new MatTableDataSource<User>(
           this.project?.readers
         );
       } else if (this.optionTableBackup === 'Writers') {
+        if (
+          (this.project && this.project?.writers === undefined) ||
+          this.project?.writers === null
+        )
+          this.project.writers = new Array<User>();
+
         this.project?.writers.push(item);
         this.dataSourceMain = new MatTableDataSource<User>(
           this.project?.writers
@@ -191,5 +201,18 @@ export class ConfigComponent implements OnInit {
 
     this.selection.clear();
     this.closeDialog();
+  }
+
+  deleteProject(){
+    this._projectService.deleteProject(this.project as Project).subscribe(
+      (data) => {
+        console.log('Delete Project:', data);
+        this._handleMessage.handlerSuccess('Project successfully deleted','','/search');
+      },
+      (error) => {
+        console.log('Error:', error);
+        this._handleMessage.handlerError(error.error.detail);
+      }
+    );
   }
 }

@@ -1,0 +1,15 @@
+.material-icons {
+  margin-top: 10px;
+  font-size: 48px;
+  display: block;
+
+  position: relative;
+}
+
+.message {
+  position: relative;
+  text-align: center;
+  font-size: 20px;
+  color: #000;
+  font-weight: bold;
+}

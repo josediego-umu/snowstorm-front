@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../model/project.model';
+import { MessageHandlerService } from 'src/app/services/message-handler.service';
 
 @Component({
   selector: 'app-project-form',
@@ -12,8 +13,11 @@ export class ProjectFormComponent {
   name: string = '';
   description: string = '';
   visibility: string = 'private';
-  
-  constructor(private projectService: ProjectService) {}
+
+  constructor(
+    private _projectService: ProjectService,
+    private _messageHandler: MessageHandlerService
+  ) {}
 
   handleFileInput(event: any) {
     console.log('Evento:', event);
@@ -27,23 +31,42 @@ export class ProjectFormComponent {
   }
 
   onSubmit() {
-
-    console.log('On Submit:', this.file, this.name, this.description, this.visibility);
+    console.log(
+      'On Submit:',
+      this.file,
+      this.name,
+      this.description,
+      this.visibility
+    );
 
     if (this.file !== null && this.name !== '') {
       const file: File = this.file;
-      const Data = this.projectService.createProject(
+      const Data = this._projectService.createProject(
         this.name,
         this.description,
         this.visibility,
         this.file
       );
 
+      Data.subscribe(
+        (data) => {
+          const project = data as Project;
+          console.log('Project created:', project);
+          this._messageHandler.handlerSuccess(
+            'Project successfully created',
+            '',
+            '/project/' + project.id
+          );
+        },
+        (error) => {
+          this._messageHandler.handlerError(error.error.detail);
+        }
+      );
+
       if (Data) {
         console.log('Project created:', Data);
       }
     }
-
   }
 
   private precondition(files: FileList): boolean {

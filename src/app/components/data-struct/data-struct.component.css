@@ -65,6 +65,13 @@ td:hover {
   background-color: #3e9cb9;
 }
 
+.btn-delete {
+  position: relative;
+  top: 9vh;
+  left: 14vh;
+  background-color: #3e9cb9;
+}
+
 .btn {
   background-color: #3e9cb9;
   border: none;
@@ -79,7 +86,6 @@ td:hover {
 }
 
 .loadScreen {
-
   position: relative;
   top: 50vh;
   left: 50vw;
@@ -96,24 +102,19 @@ ul li {
   left: 0;
   width: 100vw;
   background-color: seashell;
- 
 }
 
-.option{
+.option {
   cursor: pointer;
 }
 
-.search-input{
+.search-input {
   position: relative;
   left: 1.5vw;
   margin-top: 1.5vh;
   margin-bottom: 1.5vh;
 }
 
-.menu-list-content{
-  
+.menu-list-content {
   width: 500px;
 }
-
-
-

@@ -1,4 +1,3 @@
-
 <app-header></app-header>
 
 <div class="container">
@@ -10,25 +9,79 @@
                 </div>
                 <div class="card-body">
                     <form (ngSubmit)="this.register()" #registerForm="ngForm">
-                        
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" [(ngModel)]="this.user.username" required>
-                        
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" [(ngModel)]="this.user.name" required>
 
-                            <label for="email">Email address</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" [(ngModel)]="this.user.email" required>
+                        <label for="username">Username</label>
+                        <input [formControl]="this.usernameFormControl" type="text" class="form-control" id="username"
+                            name="username" placeholder="Enter your username" [(ngModel)]="this.user.username" required>
 
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" [(ngModel)]="this.user.password" required>
+                        <div class="alert alert-danger mt-2"
+                            [hidden]="this.usernameFormControl.valid || this.usernameFormControl.pristine">
+                            <p *ngIf="this.usernameFormControl.errors?.['required']">Username is required</p>
+                        </div>
 
-                            <label for="confirmPassword">Confirm Password</label>
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-                                placeholder="Confirm your password" [(ngModel)]="this.confirmPassword" required>
 
-                            <label for="birthday">Birthday</label>
-                            <input type="date" class="form-control" id="birthday" name="birthday" [(ngModel)]="this.user.dateOfBirth" required>                     
+                        <label for="name">Name</label>
+                        <input [formControl]="this.nameFormControl" type="text" class="form-control" id="name"
+                            name="name" placeholder="Enter your name" [(ngModel)]="this.user.name" required>
+
+                        <div class="alert alert-danger mt-2"
+                            [hidden]="this.nameFormControl.valid || this.nameFormControl.pristine">
+                            <p *ngIf="this.nameFormControl.errors?.['required']">Name is required</p>
+                        </div>
+
+                        <label for="email">Email address</label>
+                        <input [formControl]="this.emailFormControl" type="email" class="form-control" id="email"
+                            name="email" placeholder="Enter your email" [(ngModel)]="this.user.email" required>
+
+                        <div class="alert alert-danger mt-2"
+                            [hidden]="this.emailFormControl.valid || this.emailFormControl.pristine">
+                            <p *ngIf="this.emailFormControl.errors?.['required']">Email is required</p>
+                            <p *ngIf="this.emailFormControl.errors?.['email']">Email is invalid</p>
+                        </div>
+
+                        <label for="password">Password</label>
+                        <input [formControl]="this.passwordFormControl" type="password" class="form-control"
+                            id="password" name="password" placeholder="Enter your password"
+                            [(ngModel)]="this.user.password" required>
+
+                        <div class="alert alert-danger mt-2"
+                            [hidden]="this.passwordFormControl.valid || this.passwordFormControl.pristine">
+                            <p *ngIf="this.passwordFormControl.errors?.['required']">Password is required</p>
+                            <p *ngIf="this.passwordFormControl.errors?.['minlength']">Password must be at least
+                                {{this.passwordFormControl.errors?.['minlength'].requiredLength}} characters long</p>
+
+                            <p *ngIf="this.passwordFormControl.errors?.['requiredPattern']">
+                            <ul>
+                                <li>Password must contain at least one uppercase letter</li>
+                                <li>Password must contain at least one lowercase letter</li>
+                                <li>Password must contain at least one number</li>
+                                <li>Password must contain at least one special character</li>
+                            </ul>
+
+                        </div>
+
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input [formControl]="this.confirmPasswordFormControl" type="password" class="form-control"
+                            id="confirmPassword" name="confirmPassword" placeholder="Confirm your password"
+                            [(ngModel)]="this.confirmPassword" required>
+
+                        <div class="alert alert-danger mt-2"
+                            [hidden]="this.confirmPasswordFormControl.valid || this.confirmPasswordFormControl.pristine ">
+                            <p *ngIf="this.confirmPasswordFormControl.errors?.['required']">Confirm Password is required
+                            </p>
+                            <p *ngIf="">Passwords must
+                                match</p>
+                        </div>
+
+                        <label for="birthday">Birthday</label>
+                        <input [formControl]="this.BirthDateFormControl" type="date" class="form-control" id="birthday"
+                            name="birthday" [(ngModel)]="this.user.dateOfBirth" required="">
+
+                        <div class="alert alert-danger mt-2"
+                            [hidden]="this.BirthDateFormControl.valid || this.BirthDateFormControl.pristine">
+                            <p *ngIf="this.BirthDateFormControl.errors?.['required']">Birthday is required</p>
+                        </div>
+
                         <button type="submit" class="btn btn-primary btn-register">Register</button>
                     </form>
                 </div>

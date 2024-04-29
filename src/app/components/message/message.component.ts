@@ -7,7 +7,9 @@ import { Component, Input } from '@angular/core';
 })
 export class MessageComponent {
   
-  @Input() type: string = 'info'; 
-  @Input() message: string = 'Mensaje por defecto'; 
+  @Input() type: string = 'info';
+  @Input() code: string = ''; 
+  @Input() message: string = 'Mensaje por defecto';
+  @Input() redirectUrl: string = ''; 
 
 }

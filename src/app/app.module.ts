@@ -42,7 +42,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource } from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { ConfigComponent } from './components/config/config.component';
-
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -88,6 +88,7 @@ import { ConfigComponent } from './components/config/config.component';
     MatIconModule,
     MatTableModule,
     MatCheckboxModule,
+    ReactiveFormsModule,
     
   ],
   providers: [

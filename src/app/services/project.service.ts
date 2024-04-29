@@ -11,12 +11,11 @@ import { authService } from './auth.service';
   providedIn: 'root',
 })
 export class ProjectService {
-
   URLAnalysis: string = 'http://localhost:8085/analyzer/project';
   URLCreateProject: string = 'http://localhost:8085/project/';
   URLExport: string = 'http://localhost:8085/project/csv/';
-  URLLabel : string = 'http://localhost:8085/analyzer/labels';
-  URLSearch : string = 'http://localhost:8085/project/filter';
+  URLLabel: string = 'http://localhost:8085/analyzer/labels';
+  URLSearch: string = 'http://localhost:8085/project/filter';
 
   ProjectSelect: Project | null = null;
 
@@ -27,7 +26,7 @@ export class ProjectService {
     description: string,
     visibility: string,
     file: File
-  ): Project | null {
+  ): Observable<Object> {
     const formData = new FormData();
 
     console.log('createProject:');
@@ -38,7 +37,9 @@ export class ProjectService {
 
     console.log('Form Data:', formData);
 
-    this.http.post(this.URLCreateProject, formData).subscribe(
+    const result = this.http.post(this.URLCreateProject, formData);
+
+    result.subscribe(
       (data) => {
         console.log(data);
         this.ProjectSelect = data as Project;
@@ -48,7 +49,7 @@ export class ProjectService {
       }
     );
 
-    return this.ProjectSelect || new Project();
+    return result;
   }
 
   saveProject(project: Project): Project {
@@ -67,12 +68,19 @@ export class ProjectService {
     return this.ProjectSelect || new Project();
   }
 
+  deleteProject(project: Project) {
+    console.log('deleteProject:', project);
+    const result = this.http.delete(this.URLCreateProject + project.id)
+
+    return result;
+  }
+
   getProject(id: string | null): Observable<Project> {
     return this.http.get<Project>(this.URLCreateProject + id);
   }
 
-  getFilteredProjects(httpParams : HttpParams): Observable<any> {
-    return this.http.get<Project[]>(this.URLSearch, {params : httpParams} );
+  getFilteredProjects(httpParams: HttpParams): Observable<any> {
+    return this.http.get<Project[]>(this.URLSearch, { params: httpParams });
   }
 
   analyze(project: Project): Observable<any> {
@@ -134,27 +142,29 @@ export class ProjectService {
     return result;
   }
 
-
-  async searchLabels(value : string, offset : number, limit : number): Promise<String[]> {
-    
+  async searchLabels(
+    value: string,
+    offset: number,
+    limit: number
+  ): Promise<String[]> {
     let params = new HttpParams().set('value', value);
 
-    if(offset !== null && offset !== undefined) {      
+    if (offset !== null && offset !== undefined) {
       params = params.set('offset', offset);
     }
 
-    if(limit !== null && limit !== undefined) {
+    if (limit !== null && limit !== undefined) {
       params = params.set('limit', limit);
     }
 
-    return this.http.get(this.URLLabel, { params }).toPromise() as Promise<String[]>;
+    return this.http.get(this.URLLabel, { params }).toPromise() as Promise<
+      String[]
+    >;
   }
 
-
   checPermission(project: ProjectDTO | Project) {
-    
     const user = this._authService.getUserFromToken();
-    
+
     if (user == null) {
       return false;
     }
@@ -173,5 +183,18 @@ export class ProjectService {
     return false;
   }
 
+  checkOwner(project: ProjectDTO | Project) {
+    const user = this._authService.getUserFromToken();
+
+    if (user == null) {
+      return false;
+    }
+
+    if (project.owner != null && project.owner.id == user.id) {
+      return true;
+    }
+
+    return false;
+  }
 
 }

@@ -1,5 +1,7 @@
 <app-header></app-header>
 
-<app-message [type]="getType()" [message]="getMessage()"></app-message>
+<div class="main-container">
+    <app-message class="message" [type]="getType()" [message]="getMessage()" [redirectUrl]="getRedirectUrl()"></app-message>   
+</div>
 
 <app-footer></app-footer>

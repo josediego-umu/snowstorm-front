@@ -1,29 +1,44 @@
-<app-header>  </app-header>
+<app-header> </app-header>
 
 <form (ngSubmit)="login()" #loginForm="ngForm">
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header">
-          <h3>Iniciar sesión</h3>
-        </div>
-        <div class="card-body">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3>Iniciar sesión</h3>
+          </div>
+          <div class="card-body">
             <div class="form-group">
               <label for="username">Username</label>
-              <input type="text" class="form-control" name="username" placeholder="Enter username" [(ngModel)]="username" required>
+              <input [formControl]="this.usernameFormControl" type="text" class="form-control" name="username"
+                placeholder="Enter username" [(ngModel)]="username" required>
+              <div class="alert alert-danger mt-2"
+                [hidden]="this.usernameFormControl.valid || this.usernameFormControl.pristine">
+                <p *ngIf="this.usernameFormControl.errors?.['required']">Username is required</p>
+              </div>
             </div>
             <div class="form-group">
               <label for="password">Password</label>
-              <input type="password" class="form-control" name="password" placeholder="Enter password" [(ngModel)]="password" required>
+              <input [formControl]="this.passwordFormControl" type="password" name="password" class="form-control"
+                placeholder="Enter password" [(ngModel)]="password" required>
+              <div class="alert alert-danger mt-2"
+                [hidden]="this.passwordFormControl.valid || this.passwordFormControl.pristine">
+                <p *ngIf="this.passwordFormControl.errors?.['required']">Password is required</p>
+                <p *ngIf="this.errorSend">{{this.errorMessage}}</p>
+              </div>
+              
+              <div class="alert alert-danger mt-2" [hidden]="!this.errorSend">
+                <p>{{this.errorMessage}}</p>
+              </div>
+
             </div>
             <button type="submit" class="btn btn-primary btn-login" [disabled]="loginForm.invalid">Login</button>
             <button type="button" routerLink="/register" class="btn btn-primary btn-register">Register</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </form>
-
 <app-footer> </app-footer>
