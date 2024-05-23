@@ -39,16 +39,6 @@ export class ProjectService {
 
     const result = this.http.post(this.URLCreateProject, formData);
 
-    result.subscribe(
-      (data) => {
-        console.log(data);
-        this.ProjectSelect = data as Project;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-
     return result;
   }
 
