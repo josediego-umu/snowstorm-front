@@ -104,29 +104,14 @@ export class ProjectService {
     const result = new Array<Array<String>>(data.rows.length);
 
     for (let i = 0; i < data.rows.length; i++) {
-      result[i] = new Array<String>(data.rows[i].valuesRow.length + 1);
+      result[i] = new Array<String>(data.rows[i].length);
 
-      if (
-        data.rows[i].labeledRow != null &&
-        data.rows[i].valuesRow?.length !== data.rows[i].labeledRow?.length
-      ) {
-        result[i][0] = 'Row ${i} has different number of values and labels';
-        return result;
-      }
-
-      for (let j = 0; j < data.rows[i].valuesRow.length; j++) {
-        result[i][j] =
-          data.rows[i].valuesRow[j] +
-          (data.rows[i].labeledRow
-            ? data.rows[i].labeledRow[j]
-              ? ' | ' + data.rows[i].labeledRow[j]
-              : ''
-            : '');
-
+      for (let j = 0; j < data.rows[i].length; j++) {
+        result[i][j] = data.rows[i][j] + ' | ' + data.labels.get(data.rows[i][j]);
         result[i][j] = result[i][j].replace(/['"]/g, '');
       }
 
-      result[i][data.rows[i].valuesRow.length + 1] = '\n';
+      result[i][data.rows[i].length + 1] = '\n';
     }
     console.log('Result:', result);
     return result;

@@ -5,6 +5,9 @@ import { DialogServiceService } from 'src/app/services/dialog-service.service';
 import { DialogWithTemplateComponent } from '../dialog-with-template/dialog-with-template.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MessageHandlerService } from 'src/app/services/message-handler.service';
+import { Project } from 'src/app/model/project.model';
+import { tick } from '@angular/core/testing';
+import { StructuredData } from 'src/app/model/structured-Data.model';
 
 @Component({
   selector: 'app-data-struct',
@@ -15,7 +18,7 @@ export class DataStructComponent implements OnInit {
   [x: string]: any;
 
   id: string | null = '';
-  project: any = null;
+  project: Project | null = null;
   dataReceived: boolean = false;
   row: number = 0;
   cell: number = 0;
@@ -46,15 +49,25 @@ export class DataStructComponent implements OnInit {
   async loadProject() {
     const project = await this._projectService.getProject(this.id).toPromise();
     console.log('Load Project:', project);
-    this.project = project;
+    this.project = project as Project;
   }
 
   analyze() {
     console.log('Analyzing');
     this.dataReceived = false;
+
+    if (this.project == null) {
+      return;
+    }
+
     this._projectService.analyze(this.project).subscribe(
       (res) => {
         console.log(res);
+
+        if (this.project == null) {
+          return;
+        }
+
         this.project.structuredData = res;
         this.dataReceived = true;
       },
@@ -72,11 +85,17 @@ export class DataStructComponent implements OnInit {
 
   exportToCsvLocal() {
     console.log('Exporting to CSV');
+    if (this.project == null) {
+      return;
+    }
     this._projectService.exportToCsvLocal(this.project);
   }
 
   saveProject() {
     console.log('Saving Project');
+    if (this.project == null) {
+      return;
+    }
     const projectSaved = this._projectService.saveProject(this.project);
     console.log('Project Saved');
     console.log(projectSaved);
@@ -84,6 +103,9 @@ export class DataStructComponent implements OnInit {
 
   deleteProject() {
     console.log('Deleting Project');
+    if (this.project == null) {
+      return;
+    }
     this._projectService.deleteProject(this.project).subscribe(
       (res) => {
         console.log('Project Deleted');
@@ -99,19 +121,6 @@ export class DataStructComponent implements OnInit {
         this._messageHandler.handlerError(error.error.detail);
       }
     );
-  }
-
-  async SelectCell(row: number, cell: number) {
-    console.log('Selecting Cell:', row, cell);
-    this.index = 1;
-    this.row = row;
-    this.cell = cell;
-    this.value = this.project.structuredData.rows[row].valuesRow[cell];
-    console.log('Label:', this.value);
-    const res = await this._projectService.searchLabels(this.value, 0, 10);
-
-    this.labels = res as string[];
-    console.log('Labels:', res);
   }
 
   searchLabels() {
@@ -131,43 +140,7 @@ export class DataStructComponent implements OnInit {
       );
   }
 
-  selectOption(option: string) {
-    console.log('Selecting Option:', option);
-    console.log('Row:', this.row);
-    console.log('Cell:', this.cell);
-    console.log('Labels:', this.project.structuredData.rows[this.row]);
-
-    if (!this.project.structuredData.rows[this.row].labeledRow) {
-      this.project.structuredData.rows[this.row].labeledRow = [];
-    }
-
-    this.project.structuredData.rows[this.row].labeledRow[this.cell] = option;
-    this.index = 0;
-  }
-
-  resetLabel() {
-    this.index = 0;
-  }
-
-  nextLabel() {
-    this.index++;
-    this.searchLabels();
-  }
-
-  previousLabel() {
-    if (this.index > 0) {
-      this.index--;
-    }
-
-    this.searchLabels();
-  }
-
-  openDialogCustom() {
-    this._dialogService.openDialogCustom({
-      title: 'Custom Dialog',
-      content: 'This is a custom dialog',
-    });
-  }
+  
 
   openDialogWithTemplate(template: TemplateRef<any>) {
     this.matDialogRef = this._dialogService.openDialogWithTemplate({
@@ -180,10 +153,76 @@ export class DataStructComponent implements OnInit {
   }
 
   havePermission(): boolean {
+    if (this.project == null) {
+      return false;
+    }
     return this._projectService.checPermission(this.project);
   }
 
   ownerPermission() {
+    if (this.project == null) {
+      return false;
+    }
     return this._projectService.checkOwner(this.project);
   }
+
+  getProject(): Project {
+
+    if (this.project == null) {
+      return new Project();
+    }
+
+    return this.project;
+  }
+
+  getDataStruct(): StructuredData {
+    if (this.project == null) {
+      return new StructuredData();
+    }
+
+    return this.project.structuredData;
+  }
+
+  getRows(): Array<Array<String>> {
+  
+    if (this.project == null) {
+      return new Array<Array<String>>();
+    }
+
+    return this.getDataStruct().rows;
+
+  }
+
+  getLabels(): Map<string, string> {
+    if (this.project == null) {
+      return new Map<string, string>();
+    }
+
+    return this.getDataStruct().labels;
+  }
+
+  getHeaders(): string[] {
+    if (this.project == null) {
+      return new Array<string>();
+    }
+
+    return this.project.structuredData.rows[0];
+  }
+
+  getKeys(): IterableIterator<string> {
+    if (this.project == null) {
+      return new Map<string, string>().keys();
+    }
+
+    return this.project.structuredData.labels.keys();
+  }
+
+  getValue(key : string): string {
+    if (this.project == null || key == null)  {
+      return '';
+    }
+
+    return this.project.structuredData.labels.get(key)?.toString() || '';
+  }
+
 }
