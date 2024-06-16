@@ -43,6 +43,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { ConfigComponent } from './components/config/config.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TreeModule } from 'primeng/tree';
+import { TreeSelectModule } from 'primeng/treeselect';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { TreeTableModule } from 'primeng/treetable';
+import { AnimateModule } from 'primeng/animate';
+import { TreeTableBasicDemo } from './tree-table-basic-demo/tree-table-basic-demo.component';
+import { TreeTableTestComponent } from './tree-table-test/tree-table-test.component';
+import { ContextMenuModule } from 'primeng/contextmenu';
 
 @NgModule({
   declarations: [
@@ -62,6 +70,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     DialogWithTemplateComponent,
     SearchComponent,
     ConfigComponent,
+    TreeTableBasicDemo,
+    TreeTableTestComponent,
+    
+    
   
   ],
   imports: [
@@ -89,7 +101,12 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatTableModule,
     MatCheckboxModule,
     ReactiveFormsModule,
-    
+    TreeModule,
+    TreeSelectModule,
+    TreeTableModule,
+    AnimateModule,
+    SelectButtonModule,
+    ContextMenuModule
   ],
   providers: [
     DatePipe,

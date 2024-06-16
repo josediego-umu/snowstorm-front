@@ -11,6 +11,8 @@ import { MatDialogActions } from '@angular/material/dialog';
 import { ModalComponent } from './components/modal/modal.component';
 import { SearchComponent } from './components/search/search.component';
 import { ConfigComponent } from './components/config/config.component';
+import { TreeTableTestComponent } from './tree-table-test/tree-table-test.component';
+import { TreeTableBasicDemo } from './tree-table-basic-demo/tree-table-basic-demo.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +26,7 @@ const routes: Routes = [
   { path: 'search', component: SearchComponent },
   { path: 'project/:id/config', component: ConfigComponent },
   { path: 'project/:id', component: DataStructComponent },
+  { path: 'testTree', component: TreeTableTestComponent}
   //{ path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 

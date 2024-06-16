@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ChildrenOutletContexts } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { DialogServiceService } from 'src/app/services/dialog-service.service';
 import { DialogWithTemplateComponent } from '../dialog-with-template/dialog-with-template.component';
@@ -8,6 +8,7 @@ import { MessageHandlerService } from 'src/app/services/message-handler.service'
 import { Project } from 'src/app/model/project.model';
 import { tick } from '@angular/core/testing';
 import { StructuredData } from 'src/app/model/structured-Data.model';
+import { TreeNode } from 'primeng/api';
 
 @Component({
   selector: 'app-data-struct',
@@ -26,6 +27,15 @@ export class DataStructComponent implements OnInit {
   index: number = 0;
   limit: number = 10;
   labels: string[] = [];
+  cols: any[] = [
+                {field:'value', header: 'Value'}, 
+                {field:'label', header: 'Label'}
+              ];
+
+  files!: TreeNode[];
+  
+  columnsToValue: Map<string, Set<string>> = new Map<string, Set<string>>();
+  labelsMap: Map<string, string> = new Map<string, string>();
 
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
 
@@ -41,15 +51,25 @@ export class DataStructComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.loadProject();
+     this.loadProject().then(() => {
+      this.init();
+      this.files = this.convertToTreeNode();
+      this.dataReceived = true;
+     });
     console.log('Project:', this.project);
-    this.dataReceived = true;
   }
 
   async loadProject() {
-    const project = await this._projectService.getProject(this.id).toPromise();
+    try{
+      const project = await this._projectService.getProject(this.id).toPromise();
     console.log('Load Project:', project);
     this.project = project as Project;
+    } catch (error) {
+      console.log(error);
+      
+    }
+    
+    
   }
 
   analyze() {
@@ -68,8 +88,12 @@ export class DataStructComponent implements OnInit {
           return;
         }
 
+        this.init();
         this.project.structuredData = res;
+        this.files = this.convertToTreeNode();
         this.dataReceived = true;
+       
+        ;
       },
       (error) => {
         console.log(error);
@@ -198,7 +222,7 @@ export class DataStructComponent implements OnInit {
       return new Map<string, string>();
     }
 
-    return this.getDataStruct().labels;
+    return this.getDataStruct().labels as Map<string, string>;
   }
 
   getHeaders(): string[] {
@@ -224,5 +248,72 @@ export class DataStructComponent implements OnInit {
 
     return this.project.structuredData.labels.get(key)?.toString() || '';
   }
+
+  private convertToTreeNode(): TreeNode[] {
+
+    if (this.project == null) {
+      return new Array<TreeNode>();
+    }
+
+    console.log('Converting to Tree Node');
+   
+    let headers = this.getHeaders();
+    
+    let labels =  this.labelsMap;
+
+    let columnsToValue = this.columnsToValue;
+
+    console.log('Columns to Value:', columnsToValue);
+    console.log('Labels:', labels);
+
+    let files: TreeNode[] = new Array<TreeNode>();
+
+    for (let i = 1; i < headers.length; i++) {
+
+      let head = headers[i];
+      let label = labels.get(head) || '';  // Aquí se asegura de que la clave exista en el mapa labels
+      let node: TreeNode = { data: { 'value': head, 'label': label }, children: [] as TreeNode[] };
+      
+      let row = columnsToValue.get(head) || new Set<string>();
+      let child: TreeNode = {data: {}, children: []};
+      
+      row.forEach((value) => {  
+        
+        if(value != null && value != ''){
+          child = { data: { 'value': value, 'label': labels.get(value) || '' } };
+          node.children?.push(child);
+        }
+        
+      });
+      
+      files.push(node);
+    }
+
+    console.log('Files:', files);
+    return files;
+
+  }
+
+  init() {
+
+    if (this.project == null) {
+      return;
+    }
+
+    let entries= this.project.structuredData.columnsToValues;
+    let labelsMap =  new Map(Object.entries(this.getLabels()));
+
+    let columnsToValue = new Map<string, Set<string>>();
+
+    Object.entries(entries).forEach(([key, value]) => {
+      
+      columnsToValue.set(key, value);
+    } );
+
+    this.columnsToValue = columnsToValue;
+    this.labelsMap = labelsMap;
+  }
+
+  
 
 }
