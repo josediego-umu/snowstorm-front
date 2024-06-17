@@ -17,8 +17,6 @@ export class ProjectService {
   URLLabel: string = 'http://localhost:8085/analyzer/labels';
   URLSearch: string = 'http://localhost:8085/project/filter';
 
-  ProjectSelect: Project | null = null;
-
   constructor(private http: HttpClient, private _authService: authService) {}
 
   createProject(
@@ -55,7 +53,7 @@ export class ProjectService {
       }
     );
 
-    return this.ProjectSelect || new Project();
+    return  new Project();
   }
 
   deleteProject(project: Project) {

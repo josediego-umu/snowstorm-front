@@ -51,7 +51,6 @@ export class ProjectFormComponent {
       Data.subscribe(
         (data) => {
           const project = data as Project;
-          this._projectService.ProjectSelect = project;
           console.log('Project created:', project);
           this._messageHandler.handlerSuccess(
             'Project successfully created',

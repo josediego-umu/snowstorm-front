@@ -1,7 +1,7 @@
-app-header {
+app-header, .header {
     
-    position: relative;
-    z-index: 1;
+    position: fixed;
+    z-index: 2;
    
 }
 

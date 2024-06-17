@@ -9,6 +9,8 @@ import { Project } from 'src/app/model/project.model';
 import { tick } from '@angular/core/testing';
 import { StructuredData } from 'src/app/model/structured-Data.model';
 import { TreeNode } from 'primeng/api';
+import { OverlayPanel } from 'primeng/overlaypanel';
+import { Panel } from 'primeng/panel';
 
 @Component({
   selector: 'app-data-struct',
@@ -16,7 +18,8 @@ import { TreeNode } from 'primeng/api';
   styleUrls: ['./data-struct.component.css'],
 })
 export class DataStructComponent implements OnInit {
-  [x: string]: any;
+  
+  @ViewChild('panel') panel!: Panel;
 
   id: string | null = '';
   project: Project | null = null;
@@ -33,7 +36,22 @@ export class DataStructComponent implements OnInit {
               ];
 
   files!: TreeNode[];
-  
+  selectValue!: any | null;
+  isCollapsed = false;
+
+  items = [
+    { name: 'Item 1' },
+    { name: 'Item 2' },
+    { name: 'Item 3' },
+    { name: 'Item 4' },
+    { name: 'Item 5' },
+    { name: 'Item 6' },
+    { name: 'Item 7' },
+    { name: 'Item 8' },
+    { name: 'Item 9' },
+    { name: 'Item 10' }
+  ];
+
   columnsToValue: Map<string, Set<string>> = new Map<string, Set<string>>();
   labelsMap: Map<string, string> = new Map<string, string>();
 
@@ -164,8 +182,6 @@ export class DataStructComponent implements OnInit {
       );
   }
 
-  
-
   openDialogWithTemplate(template: TemplateRef<any>) {
     this.matDialogRef = this._dialogService.openDialogWithTemplate({
       template,
@@ -175,6 +191,27 @@ export class DataStructComponent implements OnInit {
   closeDialog() {
     this._dialogService.closeDialog();
   }
+
+  handleNodeSelection(event: any) {
+    console.log('Event:', event);
+
+    this._projectService.searchLabels(event.value, 0, 3).then(
+      (res) => {
+        console.log('Labels:', res);
+        this.labels = res as string[];
+        if (this.labels.length === 0 || (this.labels.length === 1 && this.labels[0] === '')) {
+          this.labels[0] = 'No labels found';
+        }
+      },
+      (error) => {
+        console.log(error);
+        this._messageHandler.handlerError(error.error.detail);
+      }
+    );
+    
+    this.selectValue = event;    
+  }
+
 
   havePermission(): boolean {
     if (this.project == null) {

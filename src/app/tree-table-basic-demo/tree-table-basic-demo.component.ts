@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MenuItem, TreeNode } from 'primeng/api';
 import { NodeService } from '../services/node.service';
 import { TreeTable } from 'primeng/treetable';
@@ -12,6 +12,8 @@ export class TreeTableBasicDemo implements OnInit {
   @Input() files!: TreeNode[];
   @Input() cols!: any[];
   @ViewChild('tt') treeTable!: TreeTable;
+  @Output() nodeSelected = new EventEmitter<any>();
+  
   selectedNode!: TreeNode;
   items!: MenuItem[];
 
@@ -24,6 +26,7 @@ export class TreeTableBasicDemo implements OnInit {
   constructor(private nodeService: NodeService) {}
 
   ngOnInit() {
+    console.log('ngOnInit tree-table-basic-demo.component.ts');
     this.items = [
       { label: "Toggle", icon: 'bi bi-chevron-bar-expand', command: (event) => this.toggleFile(this.selectedNode) }
     ];
@@ -50,6 +53,12 @@ export class TreeTableBasicDemo implements OnInit {
     node.expanded = !node.expanded;
     this.files = [...this.files];
 }
+
+selectValue(value: TreeNode) {
+  
+  this.nodeSelected.emit(value);
+}
+
 
 }
 

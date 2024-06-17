@@ -1,9 +1,4 @@
-header, app-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
+
 
 body {
   margin-top: 60px; /* Adjust this value based on the height of your header to prevent overlap */
@@ -74,12 +69,25 @@ td:hover {
 }
 
 .loadScreen {
+  background-color: #3e9cb9;
   position: fixed;
   top: 50%;
   left: 50%;
   
 }
 
+.horizontal-list {
+  display: flex;
+  flex-direction: row;
+}
+
+
+header, app-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
 app-footer {
   
   bottom: 0;

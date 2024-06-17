@@ -51,6 +51,10 @@ import { AnimateModule } from 'primeng/animate';
 import { TreeTableBasicDemo } from './tree-table-basic-demo/tree-table-basic-demo.component';
 import { TreeTableTestComponent } from './tree-table-test/tree-table-test.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
+import { PanelModule } from 'primeng/panel';
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { DataViewModule } from 'primeng/dataview';
 
 @NgModule({
   declarations: [
@@ -106,7 +110,11 @@ import { ContextMenuModule } from 'primeng/contextmenu';
     TreeTableModule,
     AnimateModule,
     SelectButtonModule,
-    ContextMenuModule
+    ContextMenuModule,
+    PanelModule,
+    PanelMenuModule,
+    OverlayPanelModule,
+    DataViewModule
   ],
   providers: [
     DatePipe,
