@@ -2,7 +2,7 @@ export class StructuredData {
   id: string;
   rows: string[][];
   columnsToValues: Map<string,Set<string>>;
-  labels: Map<string, string>;
+  labels: any;
   
 
   constructor() {

@@ -1,5 +1,5 @@
 <body>
-    <app-header class="header"></app-header>
+    <app-header></app-header>
     <form>
         <div *ngIf="this.dataReceived" class="content-wrapper">
             <div class="button-container">
@@ -23,24 +23,26 @@
 
     <app-footer *ngIf="dataReceived"></app-footer>
 
-    <!--PANEL #overlayPanel -->
-    <p-panel #panel *ngIf="this.selectValue" [toggleable]="true" [collapsed]="isCollapsed" [style]="{'width': '100%', 'position': 'fixed', 'bottom': '0', 'left': '0'}">
+    <!--PANEL -->
+    <p-panel #panel *ngIf="this.selectValue" [toggleable]="true" [style]="{'width': '100%', 'position': 'fixed', 'bottom': '0', 'left': '0'}">
         <ng-template pTemplate="header">
             Selected Label for : {{ this.selectValue.value }}
         </ng-template>
         <div>
 
             <mat-form-field>
-                <mat-label>Favorite food</mat-label>
-                <input matInput placeholder="Value" value="Female">
+                <mat-label>Value to be searched</mat-label>
+                <input #SearchLabelInput matInput placeholder="Value" value="{{this.selectValue.value}}"  (keyup.enter)="searchLabelInput(SearchLabelInput.value)">
             </mat-form-field>
+            <button type="button" (click)="searchLabelInput(SearchLabelInput.value)"
+                    class="btn btn-primary btn-search-input">search</button>
 
             <mat-list class="horizontal-list">
                 <mat-list-item *ngFor="let label of this.labels">
-                    <h4 mat-line>{{ label}}</h4>
+                    <h4 mat-line (click)="selectLabel(label)">{{ label}}</h4>
                 </mat-list-item>
             </mat-list>
-            <mat-paginator class="paginator-footer" [length]="200" [pageSizeOptions]="[10, 50, 100]"
+            <mat-paginator class="paginator-footer" [length]="200" [pageSizeOptions]="[3]"
                 aria-label="Select page">
             </mat-paginator>
         </div>

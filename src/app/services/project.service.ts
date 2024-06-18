@@ -119,7 +119,7 @@ export class ProjectService {
     value: string,
     offset: number,
     limit: number
-  ): Promise<String[]> {
+  ): Promise<any> {
     let params = new HttpParams().set('value', value);
 
     if (offset !== null && offset !== undefined) {

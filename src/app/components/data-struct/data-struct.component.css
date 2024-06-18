@@ -81,9 +81,13 @@ td:hover {
   flex-direction: row;
 }
 
+.btn-search-input{
 
-header, app-header {
-  position: absolute;
+  margin-left: 20px;
+}
+
+ app-header {
+  position: absolute !important;
   top: 0;
   left: 0;
   width: 100%;

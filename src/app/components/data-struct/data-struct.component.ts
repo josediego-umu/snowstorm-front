@@ -11,6 +11,7 @@ import { StructuredData } from 'src/app/model/structured-Data.model';
 import { TreeNode } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { Panel } from 'primeng/panel';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-data-struct',
@@ -18,8 +19,8 @@ import { Panel } from 'primeng/panel';
   styleUrls: ['./data-struct.component.css'],
 })
 export class DataStructComponent implements OnInit {
-  
   @ViewChild('panel') panel!: Panel;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   id: string | null = '';
   project: Project | null = null;
@@ -28,29 +29,16 @@ export class DataStructComponent implements OnInit {
   cell: number = 0;
   value: string = '';
   index: number = 0;
-  limit: number = 10;
+  limit: number = 3;
   labels: string[] = [];
+  totalLabels = 0;
   cols: any[] = [
-                {field:'value', header: 'Value'}, 
-                {field:'label', header: 'Label'}
-              ];
+    { field: 'value', header: 'Value' },
+    { field: 'label', header: 'Label' },
+  ];
 
   files!: TreeNode[];
   selectValue!: any | null;
-  isCollapsed = false;
-
-  items = [
-    { name: 'Item 1' },
-    { name: 'Item 2' },
-    { name: 'Item 3' },
-    { name: 'Item 4' },
-    { name: 'Item 5' },
-    { name: 'Item 6' },
-    { name: 'Item 7' },
-    { name: 'Item 8' },
-    { name: 'Item 9' },
-    { name: 'Item 10' }
-  ];
 
   columnsToValue: Map<string, Set<string>> = new Map<string, Set<string>>();
   labelsMap: Map<string, string> = new Map<string, string>();
@@ -69,25 +57,26 @@ export class DataStructComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-     this.loadProject().then(() => {
+    this.loadProject().then(() => {
       this.init();
       this.files = this.convertToTreeNode();
       this.dataReceived = true;
-     });
+    });
     console.log('Project:', this.project);
   }
 
+  ngAfterViewInit(): void {}
+
   async loadProject() {
-    try{
-      const project = await this._projectService.getProject(this.id).toPromise();
-    console.log('Load Project:', project);
-    this.project = project as Project;
+    try {
+      const project = await this._projectService
+        .getProject(this.id)
+        .toPromise();
+      console.log('Load Project:', project);
+      this.project = project as Project;
     } catch (error) {
       console.log(error);
-      
     }
-    
-    
   }
 
   analyze() {
@@ -110,8 +99,6 @@ export class DataStructComponent implements OnInit {
         this.project.structuredData = res;
         this.files = this.convertToTreeNode();
         this.dataReceived = true;
-       
-        ;
       },
       (error) => {
         console.log(error);
@@ -168,12 +155,27 @@ export class DataStructComponent implements OnInit {
   searchLabels() {
     console.log('Searching Labels');
     console.log('Value:', this.value, 'Index:', this.index);
+
+    this.paginator?.pageIndex != null
+      ? (this.index = this.paginator.pageIndex)
+      : (this.index = 0);
+    this.paginator?.pageSize != null
+      ? (this.limit = this.paginator.pageSize)
+      : (this.limit = 3);
+
     this._projectService
-      .searchLabels(this.value, this.index * 10, this.limit)
+      .searchLabels(this.value, this.index * this.limit, this.limit)
       .then(
         (res) => {
           console.log('Labels:', res);
-          this.labels = res as string[];
+
+          this.labels = res.labels as string[];
+          this.totalLabels = res.totalLabels;
+          this.paginator.length = this.totalLabels;
+
+          if (this.totalLabels === 0) {
+            this.labels = ['No results found'];
+          }
         },
         (error) => {
           console.log(error);
@@ -195,23 +197,64 @@ export class DataStructComponent implements OnInit {
   handleNodeSelection(event: any) {
     console.log('Event:', event);
 
-    this._projectService.searchLabels(event.value, 0, 3).then(
-      (res) => {
-        console.log('Labels:', res);
-        this.labels = res as string[];
-        if (this.labels.length === 0 || (this.labels.length === 1 && this.labels[0] === '')) {
-          this.labels[0] = 'No labels found';
-        }
-      },
-      (error) => {
-        console.log(error);
-        this._messageHandler.handlerError(error.error.detail);
-      }
-    );
-    
-    this.selectValue = event;    
+    this.selectValue = event;
+    this.value = this.selectValue.value;
+    setTimeout(() => {
+      //console.log('this.paginator:', this.paginator);
+      this.paginator.page.subscribe(() => {
+        this.searchLabels();
+      });
+      this.index = 0;
+      this.paginator.pageIndex = 0;
+    });
+
+    this.searchLabels();
   }
 
+  selectLabel(event: any) {
+    console.log('Select Label:', event);
+
+    for (let node of this.files) {
+      if (node.data.value === this.value) {
+        node.data.label = event;
+      }
+
+      if (node.children != null) {
+        for (let child of node.children) {
+          if (child.data.value === this.value) {
+            child.data.label = event;
+          }
+        }
+      }
+    }
+      this.labelsMap.set(this.value, event);
+
+      if (this.project == null) {
+        return;
+      }
+
+      this.project.structuredData.labels[this.value] = event;
+      console.log('Labels Project Test:', this.project.structuredData.labels[this.value]);
+  }
+
+  searchLabelInput(value: any) {
+    console.log('Value searchLabelInput:', value);
+    this.value = value.trim();
+    this.index = 0;
+    this.searchLabels();
+  }
+
+  changePage(event: any) {
+    if (this.paginator.pageIndex != null) {
+      this.index = this.paginator.pageIndex;
+    }
+
+    if (this.paginator.pageSize != null) {
+      this.limit = this.paginator.pageSize;
+    }
+
+    this.searchLabels();
+  }
 
   havePermission(): boolean {
     if (this.project == null) {
@@ -228,7 +271,6 @@ export class DataStructComponent implements OnInit {
   }
 
   getProject(): Project {
-
     if (this.project == null) {
       return new Project();
     }
@@ -245,13 +287,11 @@ export class DataStructComponent implements OnInit {
   }
 
   getRows(): Array<Array<String>> {
-  
     if (this.project == null) {
       return new Array<Array<String>>();
     }
 
     return this.getDataStruct().rows;
-
   }
 
   getLabels(): Map<string, string> {
@@ -278,8 +318,8 @@ export class DataStructComponent implements OnInit {
     return this.project.structuredData.labels.keys();
   }
 
-  getValue(key : string): string {
-    if (this.project == null || key == null)  {
+  getValue(key: string): string {
+    if (this.project == null || key == null) {
       return '';
     }
 
@@ -287,16 +327,15 @@ export class DataStructComponent implements OnInit {
   }
 
   private convertToTreeNode(): TreeNode[] {
-
     if (this.project == null) {
       return new Array<TreeNode>();
     }
 
     console.log('Converting to Tree Node');
-   
+
     let headers = this.getHeaders();
-    
-    let labels =  this.labelsMap;
+
+    let labels = this.labelsMap;
 
     let columnsToValue = this.columnsToValue;
 
@@ -306,51 +345,45 @@ export class DataStructComponent implements OnInit {
     let files: TreeNode[] = new Array<TreeNode>();
 
     for (let i = 1; i < headers.length; i++) {
-
       let head = headers[i];
-      let label = labels.get(head) || '';  // Aquí se asegura de que la clave exista en el mapa labels
-      let node: TreeNode = { data: { 'value': head, 'label': label }, children: [] as TreeNode[] };
-      
+      let label = labels.get(head) || ''; // Aquí se asegura de que la clave exista en el mapa labels
+      let node: TreeNode = {
+        data: { value: head, label: label },
+        children: [] as TreeNode[],
+      };
+
       let row = columnsToValue.get(head) || new Set<string>();
-      let child: TreeNode = {data: {}, children: []};
-      
-      row.forEach((value) => {  
-        
-        if(value != null && value != ''){
-          child = { data: { 'value': value, 'label': labels.get(value) || '' } };
+      let child: TreeNode = { data: {}, children: [] };
+
+      row.forEach((value) => {
+        if (value != null && value != '') {
+          child = { data: { value: value, label: labels.get(value) || '' } };
           node.children?.push(child);
         }
-        
       });
-      
+
       files.push(node);
     }
 
     console.log('Files:', files);
     return files;
-
   }
 
   init() {
-
     if (this.project == null) {
       return;
     }
 
-    let entries= this.project.structuredData.columnsToValues;
-    let labelsMap =  new Map(Object.entries(this.getLabels()));
+    let entries = this.project.structuredData.columnsToValues;
+    let labelsMap = new Map(Object.entries(this.getLabels()));
 
     let columnsToValue = new Map<string, Set<string>>();
 
     Object.entries(entries).forEach(([key, value]) => {
-      
       columnsToValue.set(key, value);
-    } );
+    });
 
     this.columnsToValue = columnsToValue;
     this.labelsMap = labelsMap;
   }
-
-  
-
 }
