@@ -55,7 +55,6 @@ export class TreeTableBasicDemo implements OnInit {
 }
 
 selectValue(value: TreeNode) {
-  
   this.nodeSelected.emit(value);
 }
 

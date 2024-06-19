@@ -98,3 +98,19 @@ app-footer {
   width: 100%;
   text-align: center;
 }
+
+
+
+.form-group{
+  margin-top: 20px;
+}
+
+.dialog-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-button{
+  margin: -12px -12px -12px auto;
+}

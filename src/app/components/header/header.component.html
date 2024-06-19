@@ -1,4 +1,4 @@
-<header class="header">
+<header class="header" [style.position]="position" >
   <div>
     <!-- <nav class="d-md-none navbar navbar-expand-lg navbar-light bg-light">
       <div class="container flex-items-center">
@@ -10,7 +10,7 @@
     </nav> -->
 
 
-    <nav class="d-none d-md-block navbar navbar-expand-lg navbar-light bg-light">
+    <nav [style.position]="position" class="d-none d-md-block navbar navbar-expand-lg navbar-light bg-light">
       <div class="d-flex flex-justify-between flex-items-center width-full width-lg-auto">
         <ul class="navbar-nav">
           <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
@@ -35,11 +35,11 @@
             </button>
           </mat-menu>
           <li class="nav-item" *ngIf="!isLogged()">
-            <button type="button" routerLink="/login" class="btn btn-primary">Login</button>
+            <button [style.position]="position" type="button" routerLink="/login" class="btn btn-primary">Login</button>
           </li>
           <li class="nav-item" *ngIf="isLogged()">
             <a routerLink="/profile" class="nav-link">
-              <i class="bi bi-person-circle"></i>
+              <i [style.position]="position" class="bi bi-person-circle"></i>
             </a>
         </ul>
       </div>

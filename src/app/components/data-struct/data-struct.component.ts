@@ -6,12 +6,11 @@ import { DialogWithTemplateComponent } from '../dialog-with-template/dialog-with
 import { MatDialogRef } from '@angular/material/dialog';
 import { MessageHandlerService } from 'src/app/services/message-handler.service';
 import { Project } from 'src/app/model/project.model';
-import { tick } from '@angular/core/testing';
 import { StructuredData } from 'src/app/model/structured-Data.model';
 import { TreeNode } from 'primeng/api';
-import { OverlayPanel } from 'primeng/overlaypanel';
 import { Panel } from 'primeng/panel';
 import { MatPaginator } from '@angular/material/paginator';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-data-struct',
@@ -21,12 +20,16 @@ import { MatPaginator } from '@angular/material/paginator';
 export class DataStructComponent implements OnInit {
   @ViewChild('panel') panel!: Panel;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
+  ontologyForm !: FormGroup;
+  activeOntologyId: string = '';
+  ontologies: any = {};
+  ontologiesKeys: string[] = [];
 
   id: string | null = '';
   project: Project | null = null;
   dataReceived: boolean = false;
-  row: number = 0;
-  cell: number = 0;
+
   value: string = '';
   index: number = 0;
   limit: number = 3;
@@ -39,17 +42,17 @@ export class DataStructComponent implements OnInit {
 
   files!: TreeNode[];
   selectValue!: any | null;
-
+  selectedFile: File | null = null;
   columnsToValue: Map<string, Set<string>> = new Map<string, Set<string>>();
   labelsMap: Map<string, string> = new Map<string, string>();
 
-  private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
 
   constructor(
     private _route: ActivatedRoute,
     private _projectService: ProjectService,
     private _dialogService: DialogServiceService,
-    private _messageHandler: MessageHandlerService
+    private _messageHandler: MessageHandlerService,
+    private _fb: FormBuilder
   ) {
     this._route.paramMap.subscribe((params) => {
       this.id = params.get('id');
@@ -61,8 +64,16 @@ export class DataStructComponent implements OnInit {
       this.init();
       this.files = this.convertToTreeNode();
       this.dataReceived = true;
+      this.activeOntologyId = this.project?.activeOntologyId || '';
+      this.ontologies = this.project?.ontologies || {};
     });
     console.log('Project:', this.project);
+
+    this.ontologyForm = this._fb.group({
+      file: [null, Validators.required],
+      name: ['', Validators.required],
+      iri: ['', Validators.required]
+    });
   }
 
   ngAfterViewInit(): void {}
@@ -79,6 +90,27 @@ export class DataStructComponent implements OnInit {
     }
   }
 
+loadOntology() {
+
+  const file = this.selectedFile || new File([], '');
+  const name = this.ontologyForm.value.name;
+  const iri = this.ontologyForm.value.iri;
+  const id = this.project?.id || '';
+
+  console.log('File:', this.selectedFile);
+  this._projectService.loadOntology(id, name, iri, file).subscribe(
+    (res) => {
+      console.log(res);
+      this.project = res as Project;
+    },
+    (error) => {
+      console.log(error);
+      this._messageHandler.handlerError(error.error.detail);
+    });
+  
+    this.ontologyForm.reset();
+}
+
   analyze() {
     console.log('Analyzing');
     this.dataReceived = false;
@@ -87,7 +119,7 @@ export class DataStructComponent implements OnInit {
       return;
     }
 
-    this._projectService.analyze(this.project).subscribe(
+    this._projectService.analyze(this.project, this.activeOntologyId).subscribe(
       (res) => {
         console.log(res);
 
@@ -105,6 +137,13 @@ export class DataStructComponent implements OnInit {
         this._messageHandler.handlerError(error.error.detail);
       }
     );
+  }
+
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
   }
 
   exportToCSV() {
@@ -125,6 +164,8 @@ export class DataStructComponent implements OnInit {
     if (this.project == null) {
       return;
     }
+
+    this.project.activeOntologyId = this.activeOntologyId;
     const projectSaved = this._projectService.saveProject(this.project);
     console.log('Project Saved');
     console.log(projectSaved);
@@ -164,7 +205,7 @@ export class DataStructComponent implements OnInit {
       : (this.limit = 3);
 
     this._projectService
-      .searchLabels(this.value, this.index * this.limit, this.limit)
+      .searchLabels(this.value, this.index * this.limit, this.limit,this.activeOntologyId)
       .then(
         (res) => {
           console.log('Labels:', res);
@@ -284,6 +325,34 @@ export class DataStructComponent implements OnInit {
     }
 
     return this.project.structuredData;
+  }
+
+  getOntologies(): any {
+    if (this.project == null) {
+      return new Map<string, string>();
+    }
+
+    return this.project.ontologies;
+  }
+
+  getOntologyKeys() : string[]{
+    if (this.project == null) {
+      return new Array<string>();
+    }
+
+    console.log('activeOntologyId:', this.activeOntologyId);
+    console.log('Ontologies:', this.project.ontologies);
+    return Object.keys(this.project.ontologies);
+
+  }
+
+
+  getActiveOntologyId(): string {
+    if (this.project == null) {
+      return '';
+    }
+
+    return this.project.activeOntologyId;
   }
 
   getRows(): Array<Array<String>> {

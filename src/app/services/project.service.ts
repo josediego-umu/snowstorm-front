@@ -16,6 +16,7 @@ export class ProjectService {
   URLExport: string = 'http://localhost:8085/project/csv/';
   URLLabel: string = 'http://localhost:8085/analyzer/labels';
   URLSearch: string = 'http://localhost:8085/project/filter';
+  URLOntology: string = 'http://localhost:8085/project/ontology/';
 
   constructor(private http: HttpClient, private _authService: authService) {}
 
@@ -53,12 +54,29 @@ export class ProjectService {
       }
     );
 
-    return  new Project();
+    return new Project();
+  }
+
+  loadOntology(
+    id: string,
+    name: string,
+    iri: string,
+    file: File
+  ): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('name', name);
+    formData.append('iri', iri);
+    formData.append('file', file);
+    console.log('loadOntology:', formData);
+
+    const result = this.http.post(this.URLOntology, formData);
+    return result;
   }
 
   deleteProject(project: Project) {
     console.log('deleteProject:', project);
-    const result = this.http.delete(this.URLCreateProject + project.id)
+    const result = this.http.delete(this.URLCreateProject + project.id);
 
     return result;
   }
@@ -71,9 +89,12 @@ export class ProjectService {
     return this.http.get<Project[]>(this.URLSearch, { params: httpParams });
   }
 
-  analyze(project: Project): Observable<any> {
+  analyze(project: Project, activeOntologyId :string): Observable<any> {
     console.log('Analyze Project:', project);
-    return this.http.post(this.URLAnalysis, project.structuredData);
+
+    const params = new HttpParams().set('ontologyId', activeOntologyId);
+
+    return this.http.post(this.URLAnalysis, project.structuredData, {params});
   }
 
   exportToCSV(id: string | null): Observable<any> {
@@ -105,7 +126,8 @@ export class ProjectService {
       result[i] = new Array<String>(data.rows[i].length);
 
       for (let j = 0; j < data.rows[i].length; j++) {
-        result[i][j] = data.rows[i][j] + ' | ' + data.labels.get(data.rows[i][j]);
+        result[i][j] =
+          data.rows[i][j] + ' | ' + data.labels.get(data.rows[i][j]);
         result[i][j] = result[i][j].replace(/['"]/g, '');
       }
 
@@ -118,9 +140,11 @@ export class ProjectService {
   async searchLabels(
     value: string,
     offset: number,
-    limit: number
+    limit: number,
+    activeOntologyId: string
   ): Promise<any> {
     let params = new HttpParams().set('value', value);
+    params = params.set('ontologyId', activeOntologyId);
 
     if (offset !== null && offset !== undefined) {
       params = params.set('offset', offset);
@@ -169,5 +193,4 @@ export class ProjectService {
 
     return false;
   }
-
 }

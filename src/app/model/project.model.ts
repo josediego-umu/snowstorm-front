@@ -11,8 +11,8 @@ export class Project {
   owner: User | null;
   readers: User[];
   writers: User[];
-  ontologies: Map<String, string>;
-  activeOntologyId: String;
+  ontologies: Map<string, string>;
+  activeOntologyId: string;
   historyEntries: HistoryEntry[];
 
   constructor(
@@ -30,7 +30,7 @@ export class Project {
     this.description = description;
     this.structuredData = structuredData;
     this.visibility = visibility;
-    this.ontologies = new Map<String, string>();
+    this.ontologies = new Map<string, string>();
     this.activeOntologyId = '';
     this.historyEntries = [];
     this.owner = owner;

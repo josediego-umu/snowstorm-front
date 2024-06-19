@@ -1,19 +1,34 @@
 <body>
-    <app-header></app-header>
+    <app-header position="absolute"></app-header>
     <form>
         <div *ngIf="this.dataReceived" class="content-wrapper">
-            <div class="button-container">
-                <button *ngIf="this.havePermission()" type="button" (click)="this.analyze()"
-                    class="btn btn-primary btn-analyzer">Analyze</button>
-                <button type="button" (click)="this.exportToCsvLocal()" class="btn btn-primary btn-export">Export</button>
-                <button *ngIf="this.havePermission()" type="button" (click)="this.saveProject()"
-                    class="btn btn-primary btn-save">Save</button>
-                <button *ngIf="this.ownerPermission()" type="button" (click)="this.openDialogWithTemplate(deleteDialog)"
-                    class="btn btn-primary btn-delete">Delete</button>
-            </div>
+
 
             <div class="table-container">
-                <app-tree-table-basic-demo [files]="this.files" [cols]="this.cols" (nodeSelected)="handleNodeSelection($event)"></app-tree-table-basic-demo>
+                <div class="button-container">
+                    <button *ngIf="this.havePermission()" type="button" (click)="this.analyze()"
+                        class="btn btn-primary btn-analyzer">Analyze</button>
+                    <button type="button" (click)="this.exportToCsvLocal()"
+                        class="btn btn-primary btn-export">Export</button>
+                    <button *ngIf="this.havePermission()" type="button"
+                        (click)="this.openDialogWithTemplate(loadOntologyDialog)" class="btn btn-primary btn-save">Load
+                        Ontology</button>
+                    <button *ngIf="this.havePermission()" type="button" (click)="this.saveProject()"
+                        class="btn btn-primary btn-save">Save</button>
+                    <button *ngIf="this.ownerPermission()" type="button"
+                        (click)="this.openDialogWithTemplate(deleteDialog)"
+                        class="btn btn-primary btn-delete">Delete</button>
+                </div>
+                <mat-form-field class="ontology-select">
+                    <mat-label>Ontology</mat-label>
+                    <mat-select [(value)]="this.activeOntologyId">
+                        <mat-option *ngFor="let Ontology of this.getOntologyKeys()" value="{{Ontology}}">
+                            {{ this.ontologies[Ontology]}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <app-tree-table-basic-demo [files]="this.files" [cols]="this.cols"
+                    (nodeSelected)="handleNodeSelection($event)"></app-tree-table-basic-demo>
             </div>
         </div>
     </form>
@@ -24,7 +39,8 @@
     <app-footer *ngIf="dataReceived"></app-footer>
 
     <!--PANEL -->
-    <p-panel #panel *ngIf="this.selectValue" [toggleable]="true" [style]="{'width': '100%', 'position': 'fixed', 'bottom': '0', 'left': '0'}">
+    <p-panel #panel *ngIf="this.selectValue" [toggleable]="true"
+        [style]="{'width': '100%', 'position': 'fixed', 'bottom': '0', 'left': '0'}">
         <ng-template pTemplate="header">
             Selected Label for : {{ this.selectValue.value }}
         </ng-template>
@@ -32,18 +48,18 @@
 
             <mat-form-field>
                 <mat-label>Value to be searched</mat-label>
-                <input #SearchLabelInput matInput placeholder="Value" value="{{this.selectValue.value}}"  (keyup.enter)="searchLabelInput(SearchLabelInput.value)">
+                <input #SearchLabelInput matInput placeholder="Value" value="{{this.selectValue.value}}"
+                    (keyup.enter)="searchLabelInput(SearchLabelInput.value)">
             </mat-form-field>
             <button type="button" (click)="searchLabelInput(SearchLabelInput.value)"
-                    class="btn btn-primary btn-search-input">search</button>
+                class="btn btn-primary btn-search-input">search</button>
 
             <mat-list class="horizontal-list">
                 <mat-list-item *ngFor="let label of this.labels">
                     <h4 mat-line (click)="selectLabel(label)">{{ label}}</h4>
                 </mat-list-item>
             </mat-list>
-            <mat-paginator class="paginator-footer" [length]="200" [pageSizeOptions]="[3]"
-                aria-label="Select page">
+            <mat-paginator class="paginator-footer" [length]="200" [pageSizeOptions]="[3]" aria-label="Select page">
             </mat-paginator>
         </div>
     </p-panel>
@@ -59,4 +75,39 @@
             <button mat-button (click)="this.closeDialog(); this.deleteProject()">Yes</button>
         </div>
     </ng-template>
+
+    <!--DIALOG LOAD ONTOLOGY-->
+    <ng-template #loadOntologyDialog>
+        <form [formGroup]="ontologyForm" (submit)="this.loadOntology()">
+            <h1 mat-dialog-title class="dialog-title">Load Ontology
+                <button mat-icon-button mat-dialog-close aria-label="Close" class="close-button">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </h1>
+            <div mat-dialog-content>
+                <div class="form-group">
+                    <label for="file">Select an OWL file</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" class="form-control-file" (change)="onFileChange($event)"
+                            formControlName="file" name="file" placeholder="file" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Name">Ontology Name</label>
+                    <input type="text" class="form-control" formControlName="name" name="name" placeholder="name"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="iri">IRI</label>
+                    <input type="text" class="form-control" formControlName="iri" name="iri" placeholder="IRI" required>
+                </div>
+            </div>
+            <div mat-dialog-actions>
+                <button mat-button (click)="this.closeDialog()">Cancelar</button>
+                <button mat-button type="submit" (click)="this.closeDialog()">Subir</button>
+            </div>
+        </form>
+    </ng-template>
+
+
 </body>

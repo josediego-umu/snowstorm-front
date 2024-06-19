@@ -1,6 +1,6 @@
 .header {
     width: 100%;
-    position: absolute;
+   
     
 }
 
@@ -9,11 +9,11 @@ nav {
     padding-bottom: 2vh;
     width: 100%;
     height: 7vh;
-    position: absolute;
+   
 }
 
 .btn-primary {   
-    position: absolute;
+   
     top: 1%;
     right: 2vw; 
     background-color: #3e9cb9;
@@ -21,7 +21,7 @@ nav {
 }
 
 .bi.bi-person-circle {   
-    position: absolute;
+    
     right: 2vw;
     top: -1vh;
     font-size: 5vh;

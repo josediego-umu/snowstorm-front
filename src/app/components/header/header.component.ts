@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { authService } from '../../services/auth.service';
 import { Route, Router } from '@angular/router';
 
@@ -9,6 +9,7 @@ import { Route, Router } from '@angular/router';
 })
 export class HeaderComponent {
   private searchVisible = false;
+  @Input() position: string = 'fixed';
   @Output() sidebarToggle = new EventEmitter();
 
   constructor(private _authService: authService, private _router: Router) {}
