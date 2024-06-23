@@ -13,6 +13,8 @@
                     <button *ngIf="this.havePermission()" type="button"
                         (click)="this.openDialogWithTemplate(loadOntologyDialog)" class="btn btn-primary btn-save">Load
                         Ontology</button>
+                        <button *ngIf="this.havePermission()" type="button"
+                        (click)="this.openDialogWithTemplate(history)" class="btn btn-primary btn-save">History</button>    
                     <button *ngIf="this.havePermission()" type="button" (click)="this.saveProject()"
                         class="btn btn-primary btn-save">Save</button>
                     <button *ngIf="this.ownerPermission()" type="button"
@@ -45,7 +47,6 @@
             Selected Label for : {{ this.selectValue.value }}
         </ng-template>
         <div>
-
             <mat-form-field>
                 <mat-label>Value to be searched</mat-label>
                 <input #SearchLabelInput matInput placeholder="Value" value="{{this.selectValue.value}}"
@@ -63,6 +64,22 @@
             </mat-paginator>
         </div>
     </p-panel>
+
+    <!--DIALOG History-->
+    <ng-template #history>
+        <h1 mat-dialog-title>History</h1>
+        <div mat-dialog-content>
+            <mat-list>
+                <mat-list-item *ngFor="let history of getHistoryEntries()">
+                    <mat-icon matListIcon>history</mat-icon>
+                    <span><p matLine>{{history.user}} {{ history.action }}  {{history.timestamp}} </p></span>                    
+                </mat-list-item>
+            </mat-list>
+        </div>
+        <div mat-dialog-actions>
+            <button mat-button (click)="this.closeDialog()">Close</button>
+        </div>
+    </ng-template>
 
     <!--DIALOG DELETE-->
     <ng-template #deleteDialog>

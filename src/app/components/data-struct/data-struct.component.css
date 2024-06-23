@@ -114,3 +114,19 @@ app-footer {
 .close-button{
   margin: -12px -12px -12px auto;
 }
+
+.history-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-entry strong {
+  font-size: 1.1em;
+}
+
+.timestamp {
+  color: gray;
+  font-size: 0.85em;
+  margin-top: 4px;
+}

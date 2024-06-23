@@ -11,6 +11,8 @@ import { TreeNode } from 'primeng/api';
 import { Panel } from 'primeng/panel';
 import { MatPaginator } from '@angular/material/paginator';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HistoryEntry } from 'src/app/model/history-entry.model';
+import { authService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-data-struct',
@@ -21,7 +23,7 @@ export class DataStructComponent implements OnInit {
   @ViewChild('panel') panel!: Panel;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
-  ontologyForm !: FormGroup;
+  ontologyForm!: FormGroup;
   activeOntologyId: string = '';
   ontologies: any = {};
   ontologiesKeys: string[] = [];
@@ -30,6 +32,7 @@ export class DataStructComponent implements OnInit {
   project: Project | null = null;
   dataReceived: boolean = false;
 
+  orignialValue: string = '';
   value: string = '';
   index: number = 0;
   limit: number = 3;
@@ -46,12 +49,12 @@ export class DataStructComponent implements OnInit {
   columnsToValue: Map<string, Set<string>> = new Map<string, Set<string>>();
   labelsMap: Map<string, string> = new Map<string, string>();
 
-
   constructor(
     private _route: ActivatedRoute,
     private _projectService: ProjectService,
     private _dialogService: DialogServiceService,
     private _messageHandler: MessageHandlerService,
+    private _authService: authService,
     private _fb: FormBuilder
   ) {
     this._route.paramMap.subscribe((params) => {
@@ -72,7 +75,7 @@ export class DataStructComponent implements OnInit {
     this.ontologyForm = this._fb.group({
       file: [null, Validators.required],
       name: ['', Validators.required],
-      iri: ['', Validators.required]
+      iri: ['', Validators.required],
     });
   }
 
@@ -90,26 +93,26 @@ export class DataStructComponent implements OnInit {
     }
   }
 
-loadOntology() {
+  loadOntology() {
+    const file = this.selectedFile || new File([], '');
+    const name = this.ontologyForm.value.name;
+    const iri = this.ontologyForm.value.iri;
+    const id = this.project?.id || '';
 
-  const file = this.selectedFile || new File([], '');
-  const name = this.ontologyForm.value.name;
-  const iri = this.ontologyForm.value.iri;
-  const id = this.project?.id || '';
+    console.log('File:', this.selectedFile);
+    this._projectService.loadOntology(id, name, iri, file).subscribe(
+      (res) => {
+        console.log(res);
+        this.project = res as Project;
+      },
+      (error) => {
+        console.log(error);
+        this._messageHandler.handlerError(error.error.detail);
+      }
+    );
 
-  console.log('File:', this.selectedFile);
-  this._projectService.loadOntology(id, name, iri, file).subscribe(
-    (res) => {
-      console.log(res);
-      this.project = res as Project;
-    },
-    (error) => {
-      console.log(error);
-      this._messageHandler.handlerError(error.error.detail);
-    });
-  
     this.ontologyForm.reset();
-}
+  }
 
   analyze() {
     console.log('Analyzing');
@@ -205,7 +208,12 @@ loadOntology() {
       : (this.limit = 3);
 
     this._projectService
-      .searchLabels(this.value, this.index * this.limit, this.limit,this.activeOntologyId)
+      .searchLabels(
+        this.value,
+        this.index * this.limit,
+        this.limit,
+        this.activeOntologyId
+      )
       .then(
         (res) => {
           console.log('Labels:', res);
@@ -240,6 +248,7 @@ loadOntology() {
 
     this.selectValue = event;
     this.value = this.selectValue.value;
+    this.orignialValue = this.selectValue.value;
     setTimeout(() => {
       //console.log('this.paginator:', this.paginator);
       this.paginator.page.subscribe(() => {
@@ -256,26 +265,48 @@ loadOntology() {
     console.log('Select Label:', event);
 
     for (let node of this.files) {
-      if (node.data.value === this.value) {
+      if (node.data.value === this.orignialValue) {
+        console.log('Padre node.data.label: ',node.data.label, 'event:', event);
         node.data.label = event;
+
       }
 
       if (node.children != null) {
         for (let child of node.children) {
-          if (child.data.value === this.value) {
+          if (child.data.value === this.orignialValue) {
+            console.log('Hijo node.data.label: ',node.data.label, 'event:', event);
             child.data.label = event;
           }
         }
       }
     }
-      this.labelsMap.set(this.value, event);
 
-      if (this.project == null) {
-        return;
-      }
+    console.log('this.value', this.value)
+    this.labelsMap.set(this.value, event);
 
-      this.project.structuredData.labels[this.value] = event;
-      console.log('Labels Project Test:', this.project.structuredData.labels[this.value]);
+    if (this.project == null) {
+      return;
+    }
+
+    const user = this._authService.getUserFromToken()?.username;
+
+    let historyEntry = new HistoryEntry(
+      null,
+      new Date(),
+      user,
+      'changed the label ' +
+        this.project.structuredData.labels[this.value] +
+        ' to ' +
+        event
+    );
+
+    this.project.structuredData.labels[this.value] = event;
+    this.project.historyEntries.push(historyEntry);
+
+    console.log(
+      'Labels Project Test:',
+      this.project.structuredData.labels[this.value]
+    );
   }
 
   searchLabelInput(value: any) {
@@ -335,17 +366,13 @@ loadOntology() {
     return this.project.ontologies;
   }
 
-  getOntologyKeys() : string[]{
+  getOntologyKeys(): string[] {
     if (this.project == null) {
       return new Array<string>();
     }
 
-    console.log('activeOntologyId:', this.activeOntologyId);
-    console.log('Ontologies:', this.project.ontologies);
     return Object.keys(this.project.ontologies);
-
   }
-
 
   getActiveOntologyId(): string {
     if (this.project == null) {
@@ -369,6 +396,15 @@ loadOntology() {
     }
 
     return this.getDataStruct().labels as Map<string, string>;
+  }
+
+  getHistoryEntries(): HistoryEntry[] {
+
+    if (this.project == null) {
+      return new Array<HistoryEntry>();
+    }
+
+    return this.project.historyEntries;
   }
 
   getHeaders(): string[] {
