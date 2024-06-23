@@ -13,6 +13,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HistoryEntry } from 'src/app/model/history-entry.model';
 import { authService } from 'src/app/services/auth.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-data-struct',
@@ -266,23 +267,31 @@ export class DataStructComponent implements OnInit {
 
     for (let node of this.files) {
       if (node.data.value === this.orignialValue) {
-        console.log('Padre node.data.label: ',node.data.label, 'event:', event);
+        console.log(
+          'Padre node.data.label: ',
+          node.data.label,
+          'event:',
+          event
+        );
         node.data.label = event;
-
       }
 
       if (node.children != null) {
         for (let child of node.children) {
           if (child.data.value === this.orignialValue) {
-            console.log('Hijo node.data.label: ',node.data.label, 'event:', event);
+            console.log(
+              'Hijo node.data.label: ',
+              node.data.label,
+              'event:',
+              event
+            );
             child.data.label = event;
           }
         }
       }
     }
 
-    console.log('this.value', this.value)
-    this.labelsMap.set(this.value, event);
+    this.labelsMap.set(this.orignialValue, event);
 
     if (this.project == null) {
       return;
@@ -295,17 +304,17 @@ export class DataStructComponent implements OnInit {
       new Date(),
       user,
       'changed the label ' +
-        this.project.structuredData.labels[this.value] +
+        this.project.structuredData.labels[this.orignialValue] +
         ' to ' +
         event
     );
 
-    this.project.structuredData.labels[this.value] = event;
+    this.project.structuredData.labels[this.orignialValue] = event;
     this.project.historyEntries.push(historyEntry);
 
     console.log(
       'Labels Project Test:',
-      this.project.structuredData.labels[this.value]
+      this.project.structuredData.labels[this.orignialValue]
     );
   }
 
@@ -399,7 +408,6 @@ export class DataStructComponent implements OnInit {
   }
 
   getHistoryEntries(): HistoryEntry[] {
-
     if (this.project == null) {
       return new Array<HistoryEntry>();
     }
@@ -429,6 +437,17 @@ export class DataStructComponent implements OnInit {
     }
 
     return this.project.structuredData.labels.get(key)?.toString() || '';
+  }
+
+  convertToDate(dateString: any): Date {
+
+    if (dateString !== null && Array.isArray(dateString)) {
+      const dateArray = dateString as any[];
+      let date = new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
+      return date;
+    }
+
+    return new Date();
   }
 
   private convertToTreeNode(): TreeNode[] {

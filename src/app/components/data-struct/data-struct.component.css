@@ -115,18 +115,23 @@ app-footer {
   margin: -12px -12px -12px auto;
 }
 
-.history-entry {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+/* -----------------------*/
+
+.scrollable-content {
+  max-height: 400px; /* Puedes ajustar esta altura según sea necesario */
+  overflow-y: auto;
 }
 
-.history-entry strong {
-  font-size: 1.1em;
+.timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-item {
+  margin-bottom: 10px;
 }
 
 .timestamp {
-  color: gray;
-  font-size: 0.85em;
-  margin-top: 4px;
+  font-size: 14px;
+  color: #6c757d;
 }

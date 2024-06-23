@@ -68,14 +68,21 @@
     <!--DIALOG History-->
     <ng-template #history>
         <h1 mat-dialog-title>History</h1>
-        <div mat-dialog-content>
-            <mat-list>
-                <mat-list-item *ngFor="let history of getHistoryEntries()">
-                    <mat-icon matListIcon>history</mat-icon>
-                    <span><p matLine>{{history.user}} {{ history.action }}  {{history.timestamp}} </p></span>                    
-                </mat-list-item>
-            </mat-list>
-        </div>
+        <mat-dialog-content class="scrollable-content">
+            <div class="timeline">
+              <mat-card *ngFor="let change of getHistoryEntries()" class="timeline-item">
+                <mat-card-header>
+                  <mat-card-title>
+                    <span class="icon">👤</span> User: {{ change.user }}
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <p>{{ change.action }}</p>
+                  <p class="timestamp"><span class="icon">🕒</span> {{ convertToDate(change.timestamp) | date:"short" }}</p>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </mat-dialog-content>
         <div mat-dialog-actions>
             <button mat-button (click)="this.closeDialog()">Close</button>
         </div>
