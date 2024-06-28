@@ -55,6 +55,11 @@ import { PanelModule } from 'primeng/panel';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { DataViewModule } from 'primeng/dataview';
+import { ToolbarModule } from 'primeng/toolbar';
+import { ButtonModule } from 'primeng/button';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { MenuModule } from 'primeng/menu';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -114,7 +119,12 @@ import { DataViewModule } from 'primeng/dataview';
     PanelModule,
     PanelMenuModule,
     OverlayPanelModule,
-    DataViewModule
+    DataViewModule,
+    ToolbarModule,
+    ButtonModule,
+    SplitButtonModule,
+    MenuModule,
+    MatButtonToggleModule
   ],
   providers: [
     DatePipe,

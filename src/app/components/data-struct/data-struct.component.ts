@@ -23,6 +23,9 @@ import { DatePipe } from '@angular/common';
 export class DataStructComponent implements OnInit {
   @ViewChild('panel') panel!: Panel;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('deleteDialog') deleteDialog!: TemplateRef<any>;
+  @ViewChild('history') historyDialog!: TemplateRef<any>;
+
   private matDialogRef!: MatDialogRef<DialogWithTemplateComponent>;
   ontologyForm!: FormGroup;
   activeOntologyId: string = '';
@@ -32,6 +35,7 @@ export class DataStructComponent implements OnInit {
   id: string | null = '';
   project: Project | null = null;
   dataReceived: boolean = false;
+  collapsed: boolean = false;
 
   orignialValue: string = '';
   value: string = '';
@@ -39,6 +43,8 @@ export class DataStructComponent implements OnInit {
   limit: number = 3;
   labels: string[] = [];
   totalLabels = 0;
+
+  menuItems: any[] = [];
   cols: any[] = [
     { field: 'value', header: 'Value' },
     { field: 'label', header: 'Label' },
@@ -78,6 +84,8 @@ export class DataStructComponent implements OnInit {
       name: ['', Validators.required],
       iri: ['', Validators.required],
     });
+
+    this.initMenuItems();
   }
 
   ngAfterViewInit(): void {}
@@ -260,6 +268,16 @@ export class DataStructComponent implements OnInit {
     });
 
     this.searchLabels();
+
+    if (this.panel !== null && this.panel?.collapsed) {
+      this.collapsed = !this.panel.collapsed;
+    }
+  }
+
+  togglePanel(event: any) {
+    console.log('Toggle Panel:', event);
+    const result = this.panel.toggle(event);
+    console.log('Result:', result);
   }
 
   selectLabel(event: any) {
@@ -440,7 +458,6 @@ export class DataStructComponent implements OnInit {
   }
 
   convertToDate(dateString: any): Date {
-
     if (dateString !== null && Array.isArray(dateString)) {
       const dateArray = dateString as any[];
       let date = new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
@@ -509,5 +526,24 @@ export class DataStructComponent implements OnInit {
 
     this.columnsToValue = columnsToValue;
     this.labelsMap = labelsMap;
+  }
+
+  private initMenuItems() {
+    this.menuItems = [
+      {
+        label: 'Update',
+        icon: 'pi pi-refresh',
+      },
+      {
+        label: 'Delete',
+        icon: 'pi pi-times',
+        command: () => {
+          this.openDialogWithTemplate(this.deleteDialog);
+        },
+      },
+      { label: 'Angular.io', icon: 'pi pi-info', url: 'http://angular.io' },
+      { separator: true },
+      { label: 'Setup', icon: 'pi pi-cog', routerLink: ['/setup'] },
+    ];
   }
 }

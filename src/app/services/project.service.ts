@@ -89,12 +89,12 @@ export class ProjectService {
     return this.http.get<Project[]>(this.URLSearch, { params: httpParams });
   }
 
-  analyze(project: Project, activeOntologyId :string): Observable<any> {
+  analyze(project: Project, activeOntologyId: string): Observable<any> {
     console.log('Analyze Project:', project);
 
     const params = new HttpParams().set('ontologyId', activeOntologyId);
 
-    return this.http.post(this.URLAnalysis, project.structuredData, {params});
+    return this.http.post(this.URLAnalysis, project.structuredData, { params });
   }
 
   exportToCSV(id: string | null): Observable<any> {
@@ -126,8 +126,15 @@ export class ProjectService {
       result[i] = new Array<String>(data.rows[i].length);
 
       for (let j = 0; j < data.rows[i].length; j++) {
-        result[i][j] =
-          data.rows[i][j] + ' | ' + data.labels.get(data.rows[i][j]);
+        if (
+          data.labels[data.rows[i][j]] !== null &&
+          data.labels[data.rows[i][j]] !== ''
+        ) {
+          result[i][j] = data.rows[i][j] + '|' + data.labels[data.rows[i][j]];
+        } else {
+          result[i][j] = data.rows[i][j];
+        }
+
         result[i][j] = result[i][j].replace(/['"]/g, '');
       }
 

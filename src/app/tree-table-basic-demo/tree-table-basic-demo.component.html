@@ -1,9 +1,15 @@
 
 <div class="card">
     <div class="flex justify-content-center mb-4">
+        <div class="toolbar-container">
+            <ng-content select="[toolbar]" class="p-toolbar"></ng-content>           
+        </div>
+    </div>
+    <div class="flex justify-content-center mb-4">
         <p-selectButton [options]="filterModes" [(ngModel)]="filterMode" optionLabel="label" optionValue="value"></p-selectButton>
     </div>
-    <p-treeTable #tt (onNodeSelect)="selectValue($event)" [value]="files" [scrollable]="true" [filterMode]="filterMode" [(contextMenuSelection)]="selectedNode" [contextMenu]="cm" >
+    
+    <p-treeTable class="p-treeTable" #tt (onNodeSelect)="selectValue($event)" [value]="files" [scrollable]="true" [filterMode]="filterMode" [(contextMenuSelection)]="selectedNode" [contextMenu]="cm" >
         <ng-template pTemplate="header">
             <tr>
                 <th *ngFor="let col of cols">
@@ -17,7 +23,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
-            <tr [ttRow]="rowNode" [ttContextMenuRow]="rowNode">
+            <tr [ttRow]="rowNode" class="rowData" [ngClass]="{'selected-row': selectedRow(rowData)}">
                 <td *ngFor="let col of cols; let i = index" (click)="selectValue(rowData)">
                     <p-treeTableToggler [rowNode]="rowNode" *ngIf="i === 0"></p-treeTableToggler>
                     <span > {{ rowData[col.field] }} </span>

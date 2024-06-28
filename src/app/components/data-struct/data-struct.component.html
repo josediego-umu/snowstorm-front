@@ -5,32 +5,51 @@
 
 
             <div class="table-container">
-                <div class="button-container">
-                    <button *ngIf="this.havePermission()" type="button" (click)="this.analyze()"
-                        class="btn btn-primary btn-analyzer">Analyze</button>
-                    <button type="button" (click)="this.exportToCsvLocal()"
-                        class="btn btn-primary btn-export">Export</button>
-                    <button *ngIf="this.havePermission()" type="button"
-                        (click)="this.openDialogWithTemplate(loadOntologyDialog)" class="btn btn-primary btn-save">Load
-                        Ontology</button>
-                        <button *ngIf="this.havePermission()" type="button"
-                        (click)="this.openDialogWithTemplate(history)" class="btn btn-primary btn-save">History</button>    
-                    <button *ngIf="this.havePermission()" type="button" (click)="this.saveProject()"
-                        class="btn btn-primary btn-save">Save</button>
-                    <button *ngIf="this.ownerPermission()" type="button"
-                        (click)="this.openDialogWithTemplate(deleteDialog)"
-                        class="btn btn-primary btn-delete">Delete</button>
-                </div>
-                <mat-form-field class="ontology-select">
-                    <mat-label>Ontology</mat-label>
-                    <mat-select [(value)]="this.activeOntologyId">
-                        <mat-option *ngFor="let Ontology of this.getOntologyKeys()" value="{{Ontology}}">
-                            {{ this.ontologies[Ontology]}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+
                 <app-tree-table-basic-demo [files]="this.files" [cols]="this.cols"
-                    (nodeSelected)="handleNodeSelection($event)"></app-tree-table-basic-demo>
+                    (nodeSelected)="handleNodeSelection($event)">
+
+                    <p-toolbar class="toolbar" toolbar>
+                        <ng-template pTemplate="start">
+
+                            <mat-form-field class="ontology-select">
+                                <mat-label>Ontology</mat-label>
+                                <mat-select [(value)]="this.activeOntologyId">
+                                    <mat-option *ngFor="let Ontology of this.getOntologyKeys()" value="{{Ontology}}">
+                                        {{ this.ontologies[Ontology]}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <button *ngIf="this.havePermission()" type="button" (click)="this.analyze()"
+                                class="btn btn-primary btn-analyzer">
+                                <mat-icon>manage_search</mat-icon>
+                                Analyze
+                            </button>
+                            <button type="button" (click)="this.exportToCsvLocal()" class="btn btn-primary btn-export">
+                                <mat-icon>arrow_downward</mat-icon>
+                                Export
+                            </button>
+
+                            <mat-button-toggle-group *ngIf="this.havePermission()">
+                                <mat-button-toggle (click)="this.saveProject()" type="button" class="btn-group">
+                                    <mat-icon aria-hidden="false" aria-label="save icon" fontIcon="save"></mat-icon>
+                                    Save
+                                </mat-button-toggle>
+                                <mat-button-toggle class="drop-down-button" [matMenuTriggerFor]="dropdownMenuSave">
+                                    <mat-icon>arrow_drop_down</mat-icon>
+                                </mat-button-toggle>
+                            </mat-button-toggle-group>
+
+
+                        </ng-template>
+                        <ng-template pTemplate="center">
+                        </ng-template>
+                        <ng-template pTemplate="end">
+                        </ng-template>
+                    </p-toolbar>
+
+                </app-tree-table-basic-demo>
             </div>
         </div>
     </form>
@@ -40,24 +59,54 @@
 
     <app-footer *ngIf="dataReceived"></app-footer>
 
+
+    <!--DROPDOWN MENU SAVE-->
+
+    <mat-menu #dropdownMenuSave="matMenu">
+        <button mat-menu-item (click)="this.openDialogWithTemplate(loadOntologyDialog)">
+            <mat-icon aria-hidden="false" aria-label="file upload icon" fontIcon="file_upload"></mat-icon>
+            Load Ontology
+        </button>
+        <button mat-menu-item (click)="this.openDialogWithTemplate(history)">
+            <mat-icon aria-hidden="false" aria-label="history icon" fontIcon="history"></mat-icon>
+            History
+        </button>
+        <button *ngIf="this.ownerPermission()" (click)="this.openDialogWithTemplate(deleteDialog)" mat-menu-item>
+            <mat-icon aria-hidden="false" aria-label="history icon" fontIcon="delete"></mat-icon>
+            Delete
+        </button>
+    </mat-menu>
+
     <!--PANEL -->
-    <p-panel #panel *ngIf="this.selectValue" [toggleable]="true"
-        [style]="{'width': '100%', 'position': 'fixed', 'bottom': '0', 'left': '0'}">
+    <p-panel #panel  *ngIf="this.selectValue" [toggleable]="true" [(collapsed)]="this.collapsed"  class="panel-label" >
         <ng-template pTemplate="header">
+            <div class="header-container">
             Selected Label for : {{ this.selectValue.value }}
+            <div class="panel-header-content">
+                <button *ngIf="!this.panel.collapsed" class="panel-btn" (click)="this.togglePanel($event)">
+                    <i class="pi pi-minus"></i>
+                  </button>
+                  <button *ngIf="this.panel.collapsed" class="panel-btn" (click)="this.togglePanel($event)">
+                    <i class="pi pi-plus"></i>
+                  </button>
+                <button  (click)="this.selectValue = null" class="panel-btn">
+                    <i class="pi pi-times" ></i>
+                </button>
+            </div>
+        </div>
         </ng-template>
         <div>
             <mat-form-field>
                 <mat-label>Value to be searched</mat-label>
                 <input #SearchLabelInput matInput placeholder="Value" value="{{this.selectValue.value}}"
-                    (keyup.enter)="searchLabelInput(SearchLabelInput.value)">
+                    (keyup.enter)="searchLabelInput(SearchLabelInput.value)" class="searchLabelInput">
             </mat-form-field>
             <button type="button" (click)="searchLabelInput(SearchLabelInput.value)"
                 class="btn btn-primary btn-search-input">search</button>
 
             <mat-list class="horizontal-list">
                 <mat-list-item *ngFor="let label of this.labels">
-                    <h4 mat-line (click)="selectLabel(label)">{{ label}}</h4>
+                    <h4 mat-line class="label" (click)="selectLabel(label)">{{ label}}</h4>
                 </mat-list-item>
             </mat-list>
             <mat-paginator class="paginator-footer" [length]="200" [pageSizeOptions]="[3]" aria-label="Select page">
@@ -70,19 +119,20 @@
         <h1 mat-dialog-title>History</h1>
         <mat-dialog-content class="scrollable-content">
             <div class="timeline">
-              <mat-card *ngFor="let change of getHistoryEntries()" class="timeline-item">
-                <mat-card-header>
-                  <mat-card-title>
-                    <span class="icon">👤</span> User: {{ change.user }}
-                  </mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                  <p>{{ change.action }}</p>
-                  <p class="timestamp"><span class="icon">🕒</span> {{ convertToDate(change.timestamp) | date:"short" }}</p>
-                </mat-card-content>
-              </mat-card>
+                <mat-card *ngFor="let change of getHistoryEntries()" class="timeline-item">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <span class="icon">👤</span> User: {{ change.user }}
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <p>{{ change.action }}</p>
+                        <p class="timestamp"><span class="icon">🕒</span> {{ convertToDate(change.timestamp) |
+                            date:"short" }}</p>
+                    </mat-card-content>
+                </mat-card>
             </div>
-          </mat-dialog-content>
+        </mat-dialog-content>
         <div mat-dialog-actions>
             <button mat-button (click)="this.closeDialog()">Close</button>
         </div>

@@ -1,20 +1,34 @@
 html {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 body {
-    
-    font-weight: normal;
-    
-    color: var(--text-color);
-    padding: 1rem;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-weight: normal;
+
+  color: var(--text-color);
+  padding: 1rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .card {
-   
-    padding: 2rem;
-    border-radius: 10px;
-    margin-bottom: 1rem;
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.p-toolbar {
+  margin-bottom: 50 px;
+}
+
+.rowData{
+  cursor: pointer;
+}
+
+.rowData:hover{
+  background-color: #f0f0f0;
+}
+
+.selected-row {
+  background-color: #f0f0f0; 
 }
