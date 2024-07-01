@@ -60,6 +60,9 @@ import { ButtonModule } from 'primeng/button';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuModule } from 'primeng/menu';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { MessageModule } from 'primeng/message';
+import { MessagesModule } from 'primeng/messages';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -124,11 +127,14 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     ButtonModule,
     SplitButtonModule,
     MenuModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MessageModule,
+    MessagesModule,
   ],
   providers: [
     DatePipe,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    MessageService
   ],
   bootstrap: [AppComponent],
 })

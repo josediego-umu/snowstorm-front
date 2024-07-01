@@ -23,6 +23,7 @@ export class TreeTableBasicDemo implements OnInit {
 
   selectedNode!: TreeNode;
   items!: MenuItem[];
+  expand : boolean = true;
 
   filterMode = 'lenient';
   filterModes = [
@@ -54,9 +55,19 @@ export class TreeTableBasicDemo implements OnInit {
   filterColumn(event: Event, field: string, matchMode: string) {
     const inputElement = event.target as HTMLInputElement;
     if (inputElement) {
+      console.log('inputElement.value:', inputElement.value);
       const value = inputElement.value;
       this.treeTable?.filter(value, field, matchMode); // Usa treeTable para filtrar columnas
     }
+  }
+
+  getValues(event: Event): string {
+    const inputElement = event.target as HTMLInputElement;
+    if (inputElement) {
+      return inputElement.value as string;
+    }
+
+    return '';
   }
 
   toggleFile(node: any) {
@@ -71,8 +82,33 @@ export class TreeTableBasicDemo implements OnInit {
   }
 
   selectedRow(event: any): boolean {
-    console.log('selectedRow:', event);
-    console.log('this.selectedNode:', this.selectedNode);
     return this.selectedNode === event;
   }
+
+  private expandRecursive(node: TreeNode, isExpand: boolean) {
+    
+    if (node.children) {
+      node.children.forEach(childNode => {
+        this.expandRecursive(childNode, isExpand);
+      });
+    }
+    node.expanded = isExpand;
+  }
+  
+  expandAll() {
+    this.files.forEach(node => {
+      this.expandRecursive(node, true);
+    });
+    this.files = [...this.files];
+    this.expand = !this.expand;
+  }
+  
+  collapseAll() {
+    this.files.forEach(node => {
+      this.expandRecursive(node, false);
+    });
+    this.files = [...this.files];
+    this.expand = !this.expand;
+  }
+
 }

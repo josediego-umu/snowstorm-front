@@ -32,3 +32,8 @@ body {
 .selected-row {
   background-color: #f0f0f0; 
 }
+
+.expand-button{
+  margin-right: 20px;
+  border-radius: 8px;
+}

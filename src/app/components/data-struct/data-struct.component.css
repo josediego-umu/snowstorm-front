@@ -217,6 +217,15 @@ app-footer {
   cursor: pointer;
 }
 
+.align-icon-text {
+  display: flex;
+  align-items: center;
+}
+
+.align-icon-text mat-icon {
+  margin-right: 8px; 
+}
+
 
 
 

@@ -3,7 +3,6 @@
     <form>
         <div *ngIf="this.dataReceived" class="content-wrapper">
 
-
             <div class="table-container">
 
                 <app-tree-table-basic-demo [files]="this.files" [cols]="this.cols"
@@ -22,17 +21,19 @@
                             </mat-form-field>
 
                             <button *ngIf="this.havePermission()" type="button" (click)="this.analyze()"
-                                class="btn btn-primary btn-analyzer">
+                                class="btn btn-primary btn-analyzer align-icon-text">
                                 <mat-icon>manage_search</mat-icon>
                                 Analyze
                             </button>
-                            <button type="button" (click)="this.exportToCsvLocal()" class="btn btn-primary btn-export">
+                            <button type="button" (click)="this.exportToCsvLocal()"
+                                class="btn btn-primary btn-export align-icon-text">
                                 <mat-icon>arrow_downward</mat-icon>
                                 Export
                             </button>
 
                             <mat-button-toggle-group *ngIf="this.havePermission()">
-                                <mat-button-toggle (click)="this.saveProject()" type="button" class="btn-group">
+                                <mat-button-toggle (click)="this.saveProject()" type="button"
+                                    class="btn-group align-icon-text">
                                     <mat-icon aria-hidden="false" aria-label="save icon" fontIcon="save"></mat-icon>
                                     Save
                                 </mat-button-toggle>
@@ -78,22 +79,22 @@
     </mat-menu>
 
     <!--PANEL -->
-    <p-panel #panel  *ngIf="this.selectValue" [toggleable]="true" [(collapsed)]="this.collapsed"  class="panel-label" >
+    <p-panel #panel *ngIf="this.selectValue" [toggleable]="true" [(collapsed)]="this.collapsed" class="panel-label">
         <ng-template pTemplate="header">
             <div class="header-container">
-            Selected Label for : {{ this.selectValue.value }}
-            <div class="panel-header-content">
-                <button *ngIf="!this.panel.collapsed" class="panel-btn" (click)="this.togglePanel($event)">
-                    <i class="pi pi-minus"></i>
-                  </button>
-                  <button *ngIf="this.panel.collapsed" class="panel-btn" (click)="this.togglePanel($event)">
-                    <i class="pi pi-plus"></i>
-                  </button>
-                <button  (click)="this.selectValue = null" class="panel-btn">
-                    <i class="pi pi-times" ></i>
-                </button>
+                Selected Label for : {{ this.selectValue.value }}
+                <div class="panel-header-content">
+                    <button *ngIf="!this.panel.collapsed" class="panel-btn" (click)="this.togglePanel($event)">
+                        <i class="pi pi-minus"></i>
+                    </button>
+                    <button *ngIf="this.panel.collapsed" class="panel-btn" (click)="this.togglePanel($event)">
+                        <i class="pi pi-plus"></i>
+                    </button>
+                    <button (click)="this.selectValue = null" class="panel-btn">
+                        <i class="pi pi-times"></i>
+                    </button>
+                </div>
             </div>
-        </div>
         </ng-template>
         <div>
             <mat-form-field>

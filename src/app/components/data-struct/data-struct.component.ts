@@ -7,7 +7,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MessageHandlerService } from 'src/app/services/message-handler.service';
 import { Project } from 'src/app/model/project.model';
 import { StructuredData } from 'src/app/model/structured-Data.model';
-import { TreeNode } from 'primeng/api';
+import { MessageService, TreeNode } from 'primeng/api';
 import { Panel } from 'primeng/panel';
 import { MatPaginator } from '@angular/material/paginator';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -62,7 +62,8 @@ export class DataStructComponent implements OnInit {
     private _dialogService: DialogServiceService,
     private _messageHandler: MessageHandlerService,
     private _authService: authService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _messageService: MessageService
   ) {
     this._route.paramMap.subscribe((params) => {
       this.id = params.get('id');
@@ -174,11 +175,18 @@ export class DataStructComponent implements OnInit {
   saveProject() {
     console.log('Saving Project');
     if (this.project == null) {
+      this.addMessage('error', 'Error', 'There is a problem with the project data');
       return;
     }
 
     this.project.activeOntologyId = this.activeOntologyId;
     const projectSaved = this._projectService.saveProject(this.project);
+    if (projectSaved == null) {
+      this.addMessage('error', 'Error', 'There was a problem saving the project');
+      return;
+    }
+
+    this.addMessage('success', 'Success', 'Project saved successfully');
     console.log('Project Saved');
     console.log(projectSaved);
   }
@@ -546,4 +554,11 @@ export class DataStructComponent implements OnInit {
       { label: 'Setup', icon: 'pi pi-cog', routerLink: ['/setup'] },
     ];
   }
+
+  addMessage(severityP: string, summaryP: string, detailP: string) {
+    this._messageService.add({severity: severityP, summary:summaryP, detail: detailP});
+}
+
+
+
 }
